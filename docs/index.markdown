@@ -148,3 +148,56 @@
 [Chat(primary_key=..., name='', is_hidden=True), ...]
 
 ```
+
+## Mapping with nested objects
+
+### Define an entity with an nested entity
+
+```python
+
+>>> from dataclasses import dataclass
+>>> from typing import NewType
+
+>>> MessageId = NewType("MessageId", int)
+
+>>> @dataclass
+... class Message:
+...     primary_key: MessageId
+...     user: User
+...     text: str
+
+```
+
+### Define data source with django model
+
+```python
+
+>>> from django.db import models
+
+>>> class MessageModel(models.Model):
+...     chat = models.ForeignKey(
+...         "ChatModel",
+...         related_name="messages",
+...         on_delete=models.CASCADE,
+...     )
+...     text = models.TextField()
+
+```
+
+### Define a reader mapper
+
+```python
+
+>>> from mappers import Mapper
+
+>>> mapper = Mapper(Message, MessageModel, {
+...     "primary_key": "id",
+...     "user": Mapper({"primary_key": "id"}),
+... })
+
+>>> @mapper.reader
+... def load_messages(chat_id: ChatId) -> List[Message]:
+...     """Load list of messages in given chat."""
+...     return MessageModel.objects.filter(chat_id=chat_id)
+
+```
