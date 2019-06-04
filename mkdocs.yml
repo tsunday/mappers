@@ -1,0 +1,4 @@
+site_name: Mappers
+site_description: Declarative mappers from ORM models to domain entities. And back again!
+theme:
+  name: 'material'

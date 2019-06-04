@@ -3,3 +3,4 @@
 .mypy_cache/
 .tox/
 __pycache__/
+site/
