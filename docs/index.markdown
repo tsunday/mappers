@@ -42,14 +42,14 @@
 
 ```
 
-### Define the mapper
+### Define a reader mapper
 
 ```python
 
 >>> from typing import List
 >>> from mappers import Mapper
 
->>> mapper = Mapper(User, UserModel)
+>>> mapper = Mapper(User, UserModel, {"primary_key": "id"})
 
 >>> @mapper.reader
 ... def load_users() -> List[User]:
@@ -64,5 +64,87 @@
 
 >>> load_users()
 [User(primary_key=..., created=datetime.datetime(...), modified=datetime.datetime(...), name='', about='', avatar=''), ...]
+
+```
+
+## Mapping evaluated field
+
+### Define an entity with dataclass
+
+```python
+
+>>> from dataclasses import dataclass
+>>> from typing import NewType
+
+>>> ChatId = NewType("ChatId", int)
+
+>>> @dataclass
+... class Chat:
+...     primary_key: ChatId
+...     name: str
+...     is_hidden: bool
+
+```
+
+### Define data source with django model
+
+```python
+
+>>> from django.db import models
+
+>>> class ChatModel(models.Model):
+...     name = models.CharField(max_length=255)
+...     subscribers = models.ManyToManyField(
+...         "UserModel",
+...         related_name="chats",
+...         through="ChatSubscriptionModel",
+...     )
+
+>>> class ChatSubscriptionModel(models.Model):
+...     user = models.ForeignKey(
+...         "UserModel",
+...         related_name="chat_subscriptions",
+...         on_delete=models.CASCADE,
+...     )
+...     chat = models.ForeignKey(
+...         "ChatModel",
+...         related_name="chat_subscriptions",
+...         on_delete=models.CASCADE,
+...     )
+
+```
+
+### Define a reader mapper
+
+```python
+
+>>> from django.db import models
+>>> from mappers import Mapper, Evaluated
+
+>>> mapper = Mapper(Chat, ChatModel, {
+...     "primary_key": "id",
+...     "is_hidden": Evaluated(),
+... })
+
+>>> @mapper.reader
+... def load_chats(user: User) -> List[Chat]:
+...     """Load all chats from the point of view of the logged-in user."""
+...     subscription = ChatSubscriptionModel.objects.filter(
+...         user=user.primary_key,
+...         chat=models.OuterRef("pk")
+...     )
+...     chats = ChatModel.objects.annotate(
+...         is_hidden=~models.Exists(subscription),
+...     )
+...     return chats
+
+```
+
+### Read list of domain entities directly from data source
+
+```python
+
+>>> load_chats(load_users()[0])
+[Chat(primary_key=..., name='', is_hidden=True), ...]
 
 ```
