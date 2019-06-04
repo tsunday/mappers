@@ -3,7 +3,7 @@ name = "mappers"
 version = "0.1.dev"
 
 description = "Declarative mappers from ORM models to domain entities. And back again!"
-readme = "README.markdown"
+readme = "README.md"
 license = "BSD-2-Clause"
 
 homepage = "https://dry-python.org/"
