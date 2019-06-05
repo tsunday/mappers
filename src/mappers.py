@@ -239,12 +239,12 @@ def validate_fields(fields, data_source, config):
                         break
                 else:
                     raise Exception(
-                        f"Can not fiend '{field}' field in the {model} model"
+                        "Can not fiend '%s' field in the %s model" % (field, model)
                     )
             validate_field(target_field[-1], model)
         else:
             raise Exception(
-                f"Unknown config value {target_field} in the '{field}' field"
+                "Unknown config value %s in the '%s' field" % (target_field, field)
             )
 
 
@@ -259,7 +259,7 @@ def validate_field(validation_field, data_source):
             break
     else:
         raise Exception(
-            f"Can not fiend '{validation_field}' field in the {data_source} model"
+            "Can not fiend '%s' field in the %s model" % (validation_field, data_source)
         )
 
 
@@ -276,7 +276,9 @@ def validate_mapper_field(field, field_type, mapper, data_source):
             configure(mapper)
             break
     else:
-        raise Exception(f"Can not fiend '{field}' field in the {data_source} model")
+        raise Exception(
+            "Can not fiend '%s' field in the %s model" % (field, data_source)
+        )
 
 
 def get_values_list_arguments(fields, config):
