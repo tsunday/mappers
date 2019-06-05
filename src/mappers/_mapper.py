@@ -1,4 +1,5 @@
 import dataclasses
+import inspect
 import operator
 import typing
 
@@ -184,17 +185,11 @@ def get_converter(f, mapper):
 
 
 def is_dataclass(entity):
-    return (
-        getattr(entity, dataclasses._FIELDS, None) is not None
-        and getattr(entity, dataclasses._PARAMS, None) is not None
-    )
+    return dataclasses.is_dataclass(entity) and inspect.isclass(entity)
 
 
 def get_fields(entity):
-    return dict(
-        (name, field.type)
-        for name, field in getattr(entity, dataclasses._FIELDS).items()
-    )
+    return dict((field.name, field.type) for field in dataclasses.fields(entity))
 
 
 # Django.
