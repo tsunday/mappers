@@ -8,7 +8,7 @@
 
 ### Define an entity with dataclass
 
-```python
+```pycon
 
 >>> from dataclasses import dataclass
 >>> from datetime import datetime
@@ -29,7 +29,7 @@
 
 ### Define data source with django model
 
-```python
+```pycon
 
 >>> from django.db import models
 
@@ -44,7 +44,7 @@
 
 ### Define a reader mapper
 
-```python
+```pycon
 
 >>> from typing import List
 >>> from mappers import Mapper
@@ -60,7 +60,7 @@
 
 ### Read list of domain entities directly from data source
 
-```python
+```pycon
 
 >>> load_users()
 [User(primary_key=..., created=datetime.datetime(...), modified=datetime.datetime(...), name='', about='', avatar=''), ...]
@@ -71,7 +71,7 @@
 
 ### Define an entity with dataclass
 
-```python
+```pycon
 
 >>> from dataclasses import dataclass
 >>> from typing import NewType
@@ -88,7 +88,7 @@
 
 ### Define data source with django model
 
-```python
+```pycon
 
 >>> from django.db import models
 
@@ -116,7 +116,7 @@
 
 ### Define a reader mapper
 
-```python
+```pycon
 
 >>> from django.db import models
 >>> from mappers import Mapper, Evaluated
@@ -142,7 +142,7 @@
 
 ### Read list of domain entities directly from data source
 
-```python
+```pycon
 
 >>> load_chats(load_users()[0])
 [Chat(primary_key=..., name='', is_hidden=True), ...]
@@ -153,7 +153,7 @@
 
 ### Define an entity with an nested entity
 
-```python
+```pycon
 
 >>> from dataclasses import dataclass
 >>> from typing import NewType
@@ -170,7 +170,7 @@
 
 ### Define data source with django model
 
-```python
+```pycon
 
 >>> from django.db import models
 
@@ -186,7 +186,7 @@
 
 ### Define a reader mapper
 
-```python
+```pycon
 
 >>> from mappers import Mapper
 
