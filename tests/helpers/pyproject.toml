@@ -4,6 +4,7 @@ version = "0"
 authors = []
 packages = [
     { include = "examples" },
+    { include = "django_project" },
 ]
 
 [build-system]

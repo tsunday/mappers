@@ -38,7 +38,7 @@
 ...     modified = models.DateTimeField(auto_now=True)
 ...     name = models.CharField(max_length=255)
 ...     about = models.TextField()
-...     avatar = models.ImageField()
+...     avatar = models.FileField()
 
 ```
 
