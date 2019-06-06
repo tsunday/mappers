@@ -39,6 +39,9 @@
 ...     name = models.CharField(max_length=255)
 ...     about = models.TextField()
 ...     avatar = models.FileField()
+...
+...     class Meta:
+...         app_label = "app"
 
 ```
 
@@ -48,6 +51,8 @@
 
 >>> from typing import List
 >>> from mappers import Mapper
+
+>>> from django_project.models import UserModel
 
 >>> mapper = Mapper(User, UserModel, {"primary_key": "id"})
 
@@ -99,6 +104,9 @@
 ...         related_name="chats",
 ...         through="ChatSubscriptionModel",
 ...     )
+...
+...     class Meta:
+...         app_label = "app"
 
 >>> class ChatSubscriptionModel(models.Model):
 ...     user = models.ForeignKey(
@@ -111,6 +119,9 @@
 ...         related_name="chat_subscriptions",
 ...         on_delete=models.CASCADE,
 ...     )
+...
+...     class Meta:
+...         app_label = "app"
 
 ```
 
@@ -120,6 +131,8 @@
 
 >>> from django.db import models
 >>> from mappers import Mapper, Evaluated
+
+>>> from django_project.models import ChatModel
 
 >>> mapper = Mapper(Chat, ChatModel, {
 ...     "primary_key": "id",
@@ -181,6 +194,9 @@
 ...         on_delete=models.CASCADE,
 ...     )
 ...     text = models.TextField()
+...
+...     class Meta:
+...         app_label = "app"
 
 ```
 
@@ -189,6 +205,8 @@
 ```pycon
 
 >>> from mappers import Mapper
+
+>>> from django_project.models import MessageModel
 
 >>> mapper = Mapper(Message, MessageModel, {
 ...     "primary_key": "id",
