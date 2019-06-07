@@ -67,7 +67,7 @@
 
 ```pycon
 
->>> load_users()
+>>> load_users()  # doctest: +ELLIPSIS
 [User(primary_key=..., created=datetime.datetime(...), modified=datetime.datetime(...), name='', about='', avatar=''), ...]
 
 ```
@@ -157,7 +157,7 @@
 
 ```pycon
 
->>> load_chats(load_users()[0])
+>>> load_chats(load_users()[0])  # doctest: +ELLIPSIS
 [Chat(primary_key=..., name='', is_hidden=True), ...]
 
 ```
