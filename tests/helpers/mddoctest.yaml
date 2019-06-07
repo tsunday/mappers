@@ -1,0 +1,24 @@
+- model: django_project.usermodel
+  pk: 1
+  fields:
+    created: 2019-01-01
+    modified: 2019-01-01
+    name: ''
+    about: ''
+    avatar: ''
+- model: django_project.usermodel
+  pk: 2
+  fields:
+    created: 2019-01-01
+    modified: 2019-01-01
+    name: ''
+    about: ''
+    avatar: ''
+- model: django_project.chatmodel
+  pk: 1
+  fields:
+    name: ''
+- model: django_project.chatmodel
+  pk: 2
+  fields:
+    name: ''
