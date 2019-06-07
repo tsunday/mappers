@@ -224,7 +224,7 @@ def validate_fields(fields, data_source, config):
                         break
                 else:
                     raise Exception(
-                        "Can not fiend '%s' field in the %s model" % (field, model)
+                        "Can not find '%s' field in the %s model" % (field, model)
                     )
             validate_field(target_field[-1], model)
         else:
@@ -244,7 +244,7 @@ def validate_field(validation_field, data_source):
             break
     else:
         raise Exception(
-            "Can not fiend '%s' field in the %s model" % (validation_field, data_source)
+            "Can not find '%s' field in the %s model" % (validation_field, data_source)
         )
 
 
@@ -262,7 +262,7 @@ def validate_mapper_field(field, field_type, mapper, data_source):
             break
     else:
         raise Exception(
-            "Can not fiend '%s' field in the %s model" % (field, data_source)
+            "Can not find '%s' field in the %s model" % (field, data_source)
         )
 
 
