@@ -1,36 +1,104 @@
-# Python package
-# Create and test a Python package on multiple Python versions.
-# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
-
-trigger:
-- master
-
-pool:
-  vmImage: 'ubuntu-latest'
-strategy:
-  matrix:
-    Python27:
-      python.version: '2.7'
-    Python35:
-      python.version: '3.5'
-    Python36:
-      python.version: '3.6'
-    Python37:
-      python.version: '3.7'
-
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
-
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
-
-- script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'pytest'
+jobs:
+  - job: 'Test'
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      matrix:
+        py27-django110:
+          python.version: '2.7'
+          tox.env: py27-django110
+        py27-django111:
+          python.version: '2.7'
+          tox.env: py27-django111
+        py35-django110:
+          python.version: '3.5'
+          tox.env: py35-django110
+        py35-django111:
+          python.version: '3.5'
+          tox.env: py35-django111
+        py35-django20:
+          python.version: '3.5'
+          tox.env: py35-django20
+        py35-django21:
+          python.version: '3.5'
+          tox.env: py35-django21
+        py35-django22:
+          python.version: '3.5'
+          tox.env: py35-django22
+        py36-django111:
+          python.version: '3.6'
+          tox.env: py36-django111
+        py36-django20:
+          python.version: '3.6'
+          tox.env: py36-django20
+        py36-django21:
+          python.version: '3.6'
+          tox.env: py36-django21
+        py36-django22:
+          python.version: '3.6'
+          tox.env: py36-django22
+        py37-django20:
+          python.version: '3.7'
+          tox.env: py37-django20
+        py37-django21:
+          python.version: '3.7'
+          tox.env: py37-django21
+        py37-django22:
+          python.version: '3.7'
+          tox.env: py37-django22
+        precommit:
+          python.version: '3.7'
+          tox.env: precommit
+        flake8:
+          python.version: '3.7'
+          tox.env: flake8
+        mypy:
+          python.version: '3.7'
+          tox.env: mypy
+        black:
+          python.version: '3.7'
+          tox.env: black
+        isort:
+          python.version: '3.7'
+          tox.env: isort
+        mkdocs:
+          python.version: '3.7'
+          tox.env: mkdocs
+        doctest:
+          python.version: '3.7'
+          tox.env: doctest
+    steps:
+      - task: UsePythonVersion@0
+        displayName: Get Python for Python tools.
+        inputs:
+          versionSpec: '3.6'
+          addToPath: false
+        name: pyTools
+      - script: $(pyTools.pythonLocation)/bin/pip install --upgrade tox
+        displayName: Install Python-based tools.
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '$(python.version)'
+          architecture: 'x64'
+        condition: not(in(variables['python.version'], '3.7'))
+        displayName: Use cached Python $(python.version) for tests.
+      - script: |
+          sudo add-apt-repository ppa:deadsnakes
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends python$(python.version)-dev python$(python.version)-distutils
+        condition: in(variables['python.version'], '3.7')
+        displayName: Install Python $(python.version) from the deadsnakes PPA for tests.
+      - script: $(pyTools.pythonLocation)/bin/tox -e $(tox.env)
+        displayName: run tox -e $(tox.env)
+      - script: |
+          if [ ! -f .coverage ]; then
+            echo No coverage data found.
+            exit 0
+          fi
+          PATH=$HOME/.local/bin:$PATH
+          python$(python.version) -m pip install --user codecov
+          codecov
+        env:
+          CODECOV_TOKEN: $(codecov.token)
+        displayName: Report Coverage
+        condition: succeeded()
