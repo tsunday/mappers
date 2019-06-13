@@ -132,7 +132,7 @@
 >>> from django.db import models
 >>> from mappers import Mapper, Evaluated
 
->>> from django_project.models import ChatModel
+>>> from django_project.models import ChatModel, ChatSubscriptionModel
 
 >>> mapper = Mapper(Chat, ChatModel, {
 ...     "primary_key": "id",
