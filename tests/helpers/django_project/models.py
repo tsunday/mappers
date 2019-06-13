@@ -26,7 +26,7 @@ class ChatSubscriptionModel(models.Model):
 
 
 class MessageModel(models.Model):
-    chat = models.ForeignKey(
-        "ChatModel", related_name="messages", on_delete=models.CASCADE
+    user = models.ForeignKey(
+        "UserModel", related_name="messages", on_delete=models.CASCADE
     )
     text = models.TextField()

@@ -178,6 +178,9 @@
 ...     primary_key: MessageId
 ...     user: User
 ...     text: str
+...
+...     def written_by(self, user: User) -> bool:
+...         return self.user.primary_key == user.primary_key
 
 ```
 
@@ -188,8 +191,8 @@
 >>> from django.db import models
 
 >>> class MessageModel(models.Model):
-...     chat = models.ForeignKey(
-...         "ChatModel",
+...     user = models.ForeignKey(
+...         "UserModel",
 ...         related_name="messages",
 ...         on_delete=models.CASCADE,
 ...     )
@@ -210,12 +213,31 @@
 
 >>> mapper = Mapper(Message, MessageModel, {
 ...     "primary_key": "id",
-...     "user": Mapper({"primary_key": "id"}),
+...     "user": Mapper({
+...         "primary_key": "id",
+...     }),
 ... })
 
 >>> @mapper.reader
-... def load_messages(chat_id: ChatId) -> List[Message]:
-...     """Load list of messages in given chat."""
-...     return MessageModel.objects.filter(chat_id=chat_id)
+... def load_messages() -> List[Message]:
+...     """Load list of all messages."""
+...     return MessageModel.objects.all()
+
+```
+
+### Read list of domain entities directly from data source
+
+```pycon
+
+>>> messages = load_messages()
+
+>>> messages  # doctest: +ELLIPSIS
+[Message(primary_key=..., user=User(primary_key=...), text=''), ...]
+
+>>> messages[0].written_by(load_users()[0])
+True
+
+>>> messages[1].written_by(load_users()[0])
+False
 
 ```

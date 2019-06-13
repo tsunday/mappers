@@ -22,3 +22,13 @@
   pk: 2
   fields:
     name: ''
+- model: django_project.messagemodel
+  pk: 1
+  fields:
+    user_id: 1
+    text: ''
+- model: django_project.messagemodel
+  pk: 2
+  fields:
+    user_id: 2
+    text: ''
