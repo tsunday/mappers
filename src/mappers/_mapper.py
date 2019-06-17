@@ -301,7 +301,7 @@ def get_values_list_iterable_class(entity, fields, config):
 def get_flat_values_list_iterable_class(entity):
     class _ValuesListIterable(ValuesListIterable):
         def __iter__(self):
-            for row in super().__iter__():
+            for row in super(_ValuesListIterable, self).__iter__():
                 yield entity(*row)
 
     return _ValuesListIterable
@@ -330,7 +330,7 @@ def get_nested_values_list_iterable_class(entity, fields, config):
 
     class _ValuesListIterable(ValuesListIterable):
         def __iter__(self):
-            for row in super().__iter__():
+            for row in super(_ValuesListIterable, self).__iter__():
                 yield entity(*(getter(row) for getter in getters))
 
     return _ValuesListIterable
