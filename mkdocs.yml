@@ -26,4 +26,5 @@ markdown_extensions:
       guess_lang: false
   - toc:
       permalink: true
+  - pymdownx.magiclink
   - pymdownx.superfences
