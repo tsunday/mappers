@@ -24,4 +24,6 @@ extra:
 markdown_extensions:
   - codehilite:
       guess_lang: false
+  - toc:
+      permalink: true
   - pymdownx.superfences
