@@ -39,5 +39,5 @@ def entities():
 
 
 @pytest.fixture(params=entities())
-def e():
-    pass
+def e(request):
+    return request.param
