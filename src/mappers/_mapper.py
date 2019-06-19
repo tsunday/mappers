@@ -9,10 +9,10 @@ from django.db.models.query import ValuesListIterable
 
 # TODO:
 #
-# [ ] Converter from typing.  This code should return a list of
+# [X] Converter from typing.  This code should return a list of
 #     `Channel` instances.
 #
-#     channel_mapper = Mapper(Channel, models.Channel, {"primary_key": "pk"})
+#     channel_mapper = Mapper(Channel, models.Channel, {"primary_key": "id"})
 #
 #     @channel_mapper.reader
 #     def load_channels(user: User) -> List[Channel]:
@@ -26,7 +26,7 @@ from django.db.models.query import ValuesListIterable
 # [ ] Field not found in the data source.  This code should not found
 #     `community_id` field.
 #
-#     mapper = Mapper(Message, models.Message, {"primary_key": "pk"})
+#     mapper = Mapper(Message, models.Message, {"primary_key": "id"})
 #
 # [ ] Related user expand.  This code should return a list of
 #     `Message` dataclass instances.  Each `Message` instance have
