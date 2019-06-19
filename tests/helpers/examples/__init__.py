@@ -23,6 +23,20 @@ def entities():
 
     yield examples.attrs
 
+    try:
+        import examples.pydantic_model
+
+        yield examples.pydantic_model
+    except (SyntaxError, ImportError):
+        pass
+
+    try:
+        import examples.pydantic_dataclasses
+
+        yield examples.pydantic_dataclasses
+    except (SyntaxError, ImportError):
+        pass
+
 
 @pytest.fixture(params=entities())
 def e():
