@@ -1,12 +1,12 @@
-site_name: Mappers
+site_name: mappers
 site_description: Declarative mappers from ORM models to domain entities. And back again!
 theme:
   name: 'material'
   palette:
     primary: 'indigo'
     accent: 'indigo'
-  logo:
-    icon: 'device_hub'
+  logo: 'https://raw.githubusercontent.com/dry-python/brand/master/logo/dry-python.png'
+  # FIXME: Favicon.
   language: 'en'
 repo_name: mappers
 repo_url: 'https://github.com/dry-python/mappers'
@@ -22,6 +22,7 @@ extra:
     - type: gitter  # FIXME: Its not `fa` its `fab` class.  Also, reorder when fixed.
       link: 'https://gitter.im/dry-python/mappers'
 markdown_extensions:
+  - admonition
   - codehilite:
       guess_lang: false
   - toc:
