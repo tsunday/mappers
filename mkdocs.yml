@@ -1,3 +1,4 @@
+strict: true
 site_name: mappers
 site_description: Declarative mappers from ORM models to domain entities. And back again!
 theme:
