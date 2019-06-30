@@ -1,3 +1,4 @@
+---
 - model: django_project.usermodel
   pk: 1
   fields:
