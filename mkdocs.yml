@@ -13,7 +13,7 @@ theme:
     /dry-python/brand/master/logo/dry-python.png"
   # FIXME: Favicon.
   language: 'en'
-repo_name: mappers
+repo_name: dry-python/mappers
 repo_url: 'https://github.com/dry-python/mappers'
 edit_uri: ''
 extra:
