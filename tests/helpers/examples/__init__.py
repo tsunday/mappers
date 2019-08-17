@@ -16,7 +16,7 @@ def entities():
         import examples.attrs_annotated
 
         yield examples.attrs_annotated
-    except (SyntaxError):
+    except SyntaxError:
         pass
 
     import examples.attrs

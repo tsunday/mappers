@@ -8,7 +8,8 @@ This module implements Declarative mappers from ORM models to domain entities.
 :license: BSD, see LICENSE for more details.
 """
 
-from ._mapper import Evaluated, Mapper
+from ._mapper import Evaluated
+from ._mapper import mapper_factory as Mapper
 
 
 __all__ = ["Evaluated", "Mapper"]

@@ -1,1 +1,1 @@
-pytest_plugins = ["examples"]
+pytest_plugins = ["examples", "readers"]

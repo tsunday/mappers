@@ -8,7 +8,7 @@ UserId = NewType("UserId", int)
 
 
 @attrs
-class User:
+class User(object):
     primary_key = attrib(type=UserId)
     created = attrib(type=datetime)
     modified = attrib(type=datetime)
@@ -21,7 +21,7 @@ ChatId = NewType("ChatId", int)
 
 
 @attrs
-class Chat:
+class Chat(object):
     primary_key = attrib(type=ChatId)
     name = attrib(type=str)
     is_hidden = attrib(type=bool)
@@ -31,7 +31,7 @@ MessageId = NewType("MessageId", int)
 
 
 @attrs
-class Message:
+class Message(object):
     primary_key = attrib(type=MessageId)
     user = attrib(type=User)
     text = attrib(type=str)

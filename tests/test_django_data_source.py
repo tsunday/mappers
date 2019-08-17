@@ -1,5 +1,3 @@
-from typing import List
-
 import pytest
 from django.core import management
 
@@ -20,7 +18,7 @@ def loaddata(django_db_setup, django_db_blocker):
 # Reader.
 
 
-def test_apply_result_converter(e):
+def test_apply_result_converter(e, r):
     """
     Infer collection converter from the function result annotation.
 
@@ -28,9 +26,7 @@ def test_apply_result_converter(e):
     """
     mapper = Mapper(e.User, models.UserModel, {"primary_key": "id"})
 
-    @mapper.reader
-    def load_users() -> List[e.User]:
-        return models.UserModel.objects.all()
+    load_users = r.get("load_users", mapper, e.User)
 
     user1, user2 = load_users()
 
