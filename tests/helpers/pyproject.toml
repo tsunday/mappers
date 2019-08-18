@@ -3,10 +3,10 @@ name = "helpers"
 version = "0"
 authors = []
 packages = [
-    { include = "examples" },
-    { include = "readers" },
     { include = "django_project" },
+    { include = "examples" },
     { include = "mddoctest.py"},
+    { include = "readers" },
 ]
 
 [tool.poetry.scripts]
