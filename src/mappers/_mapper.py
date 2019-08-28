@@ -238,10 +238,9 @@ class Reader(object):
 
     def raw(self, *args, **kwargs):
         # type: (*Any, **Any) -> QuerySet
-        result = self.f(*args, **kwargs)
-        result = result.values_list(*self.values_list_arguments)
+        result = self.f(*args, **kwargs).values_list(*self.values_list_arguments)
         result._iterable_class = self.values_list_iterable_class  # type: ignore
-        return result
+        return result  # type: ignore
 
 
 def get_converter(ret, entity):
