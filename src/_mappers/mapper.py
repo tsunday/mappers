@@ -16,8 +16,16 @@ from django.db.models import Model as DjangoModel
 from django.db.models import QuerySet
 from django.db.models.query import ValuesListIterable
 
-from ._entities import entity_fields_factory
-from ._types import Entity, EntityDef, EntityFactory, Field, Fields, Row, TypingDef
+from _mappers.entities import entity_fields_factory
+from _mappers.types import (
+    Entity,
+    EntityDef,
+    EntityFactory,
+    Field,
+    Fields,
+    Row,
+    TypingDef,
+)
 
 
 # TODO:

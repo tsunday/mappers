@@ -1,7 +1,7 @@
 import inspect
 from typing import Any
 
-from .._types import EntityDef, EntityFactory, Fields
+from _mappers.types import EntityDef, EntityFactory, Fields
 
 
 try:

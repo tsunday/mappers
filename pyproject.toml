@@ -33,6 +33,11 @@ classifiers = [
     "Topic :: Software Development",
 ]
 
+packages = [
+    { include = "_mappers", from = "src" },
+    { include = "mappers", from = "src" },
+]
+
 [tool.poetry.dependencies]
 python = "~2.7 || ^3.5"
 mkdocs = { version = "*", optional = true }

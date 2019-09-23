@@ -1,7 +1,7 @@
 from typing import Any, Tuple
 
-from .._types import EntityFactory, Fields
-from . import attrs, dataclasses, pydantic
+from _mappers.entities import attrs, dataclasses, pydantic
+from _mappers.types import EntityFactory, Fields
 
 
 def entity_fields_factory(entity):
