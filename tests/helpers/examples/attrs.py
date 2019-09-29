@@ -37,5 +37,4 @@ class Message(object):
     text = attrib(type=str)
 
     def written_by(self, user):
-        # type: (User) -> bool
         return self.user.primary_key == user.primary_key
