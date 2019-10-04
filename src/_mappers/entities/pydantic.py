@@ -17,7 +17,7 @@ def is_pydantic(entity):
 
 
 def get_fields(entity):
-    return dict((key, field.type_) for key, field in entity.__fields__.items())
+    return {key: field.type_ for key, field in entity.__fields__.items()}
 
 
 def get_factory(fields, entity):

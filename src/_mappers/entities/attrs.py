@@ -17,9 +17,7 @@ def is_attrs(entity):
 
 
 def get_fields(entity):
-    return dict(
-        (attribute.name, attribute.type) for attribute in entity.__attrs_attrs__
-    )
+    return {attribute.name: attribute.type for attribute in entity.__attrs_attrs__}
 
 
 def get_factory(fields, entity):
