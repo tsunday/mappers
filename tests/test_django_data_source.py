@@ -9,7 +9,7 @@ pytestmark = pytest.mark.django_db
 
 
 @pytest.fixture(scope="session", autouse=True)
-def loaddata(django_db_setup, django_db_blocker):
+def _loaddata(django_db_setup, django_db_blocker):
     """Populate the database with initial test data."""
     with django_db_blocker.unblock():
         management.call_command("loaddata", "examples.yaml")
