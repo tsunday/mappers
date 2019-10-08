@@ -1,5 +1,6 @@
 import operator
-from typing import List, Optional
+from typing import List
+from typing import Optional
 
 from django.db.models import Model as DjangoModel
 from django.db.models.query import ValuesListIterable

@@ -1,7 +1,8 @@
 from datetime import datetime
 from typing import NewType
 
-from attr import attrib, attrs
+from attr import attrib
+from attr import attrs
 
 
 UserId = NewType("UserId", int)

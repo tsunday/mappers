@@ -1,4 +1,6 @@
-from _mappers.entities import attrs, dataclasses, pydantic
+from _mappers.entities import attrs
+from _mappers.entities import dataclasses
+from _mappers.entities import pydantic
 
 
 def entity_fields_factory(entity):
