@@ -79,6 +79,9 @@ jobs:
         mypy:
           python.version: "3.8"
           tox.env: mypy
+        typechecker:
+          python.version: "3.8"
+          tox.env: typechecker
         importlint:
           python.version: "3.8"
           tox.env: importlint
