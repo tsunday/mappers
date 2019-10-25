@@ -7,51 +7,51 @@ jobs:
       vmImage: 'ubuntu-latest'
     strategy:
       matrix:
-        py27-django110:
-          python.version: '2.7'
-          tox.env: py27-django110
-        py27-django111:
-          python.version: '2.7'
-          tox.env: py27-django111
-        py35-django110:
-          python.version: '3.5'
-          tox.env: py35-django110
-        py35-django111:
-          python.version: '3.5'
-          tox.env: py35-django111
-        py35-django20:
-          python.version: '3.5'
-          tox.env: py35-django20
-        py35-django21:
-          python.version: '3.5'
-          tox.env: py35-django21
-        py35-django22:
-          python.version: '3.5'
-          tox.env: py35-django22
-        py36-django111:
-          python.version: '3.6'
-          tox.env: py36-django111
-        py36-django20:
-          python.version: '3.6'
-          tox.env: py36-django20
-        py36-django21:
-          python.version: '3.6'
-          tox.env: py36-django21
-        py36-django22:
-          python.version: '3.6'
-          tox.env: py36-django22
-        py37-django20:
-          python.version: '3.7'
-          tox.env: py37-django20
-        py37-django21:
-          python.version: '3.7'
-          tox.env: py37-django21
-        py37-django22:
-          python.version: '3.7'
-          tox.env: py37-django22
         precommit:
           python.version: '3.7'
           tox.env: precommit
+        py27-django110:
+          python.version: '2.7'
+          tox.env: py27-django110
+        py35-django110:
+          python.version: '3.5'
+          tox.env: py35-django110
+        py27-django111:
+          python.version: '2.7'
+          tox.env: py27-django111
+        py35-django111:
+          python.version: '3.5'
+          tox.env: py35-django111
+        py36-django111:
+          python.version: '3.6'
+          tox.env: py36-django111
+        py35-django20:
+          python.version: '3.5'
+          tox.env: py35-django20
+        py36-django20:
+          python.version: '3.6'
+          tox.env: py36-django20
+        py37-django20:
+          python.version: '3.7'
+          tox.env: py37-django20
+        py35-django21:
+          python.version: '3.5'
+          tox.env: py35-django21
+        py36-django21:
+          python.version: '3.6'
+          tox.env: py36-django21
+        py37-django21:
+          python.version: '3.7'
+          tox.env: py37-django21
+        py35-django22:
+          python.version: '3.5'
+          tox.env: py35-django22
+        py36-django22:
+          python.version: '3.6'
+          tox.env: py36-django22
+        py37-django22:
+          python.version: '3.7'
+          tox.env: py37-django22
         flake8:
           python.version: '3.7'
           tox.env: flake8
