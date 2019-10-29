@@ -90,7 +90,7 @@ def get_values_list_iterable_class(
     entity_factory: EntityFactory, fields: Fields, config: Config
 ) -> Type[ValuesListIterable]: ...
 def get_flat_values_list_iterable_class(
-    entity_factory: EntityFactory
+    entity_factory: EntityFactory,
 ) -> Type[ValuesListIterable]: ...
 def get_nested_values_list_iterable_class(
     entity_factory: EntityFactory, fields: Fields, config: Config
