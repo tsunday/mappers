@@ -4,32 +4,32 @@
   fields:
     created: 2019-01-01
     modified: 2019-01-01
-    name: ''
-    about: ''
-    avatar: ''
+    name: ""
+    about: ""
+    avatar: ""
 - model: django_project.usermodel
   pk: 2
   fields:
     created: 2019-01-01
     modified: 2019-01-01
-    name: ''
-    about: ''
-    avatar: ''
+    name: ""
+    about: ""
+    avatar: ""
 - model: django_project.chatmodel
   pk: 1
   fields:
-    name: ''
+    name: ""
 - model: django_project.chatmodel
   pk: 2
   fields:
-    name: ''
+    name: ""
 - model: django_project.messagemodel
   pk: 1
   fields:
     user_id: 1
-    text: ''
+    text: ""
 - model: django_project.messagemodel
   pk: 2
   fields:
     user_id: 2
-    text: ''
+    text: ""

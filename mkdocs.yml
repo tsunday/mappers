@@ -5,17 +5,17 @@ site_description: |
   Declarative mappers from ORM models to domain entities. And back
   again!
 theme:
-  name: 'material'
+  name: "material"
   palette:
-    primary: 'indigo'
-    accent: 'indigo'
+    primary: "indigo"
+    accent: "indigo"
   logo: "https://raw.githubusercontent.com\
     /dry-python/brand/master/logo/dry-python.png"
   # FIXME: Favicon.
-  language: 'en'
+  language: "en"
 repo_name: dry-python/mappers
-repo_url: 'https://github.com/dry-python/mappers'
-edit_uri: ''
+repo_url: "https://github.com/dry-python/mappers"
+edit_uri: ""
 markdown_extensions:
   - admonition
   - codehilite:
@@ -27,14 +27,14 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
 nav:
-  - 'Home': index.md
+  - "Home": index.md
   # A UI hack to split Table of Content into two visual parts.
-  - '': '/'
-  - '': '/'
-  - '': '/'
-  - '': '/'
-  - '': '/'
-  - 'GitHub': 'https://github.com/dry-python'
-  - 'Twitter': 'https://twitter.com/dry_py'
-  - 'Gitter': 'https://gitter.im/dry-python/mappers'
-  - 'LinkedIn': 'https://www.linkedin.com/company/drylabs/'
+  - "": "/"
+  - "": "/"
+  - "": "/"
+  - "": "/"
+  - "": "/"
+  - "GitHub": "https://github.com/dry-python"
+  - "Twitter": "https://twitter.com/dry_py"
+  - "Gitter": "https://gitter.im/dry-python/mappers"
+  - "LinkedIn": "https://www.linkedin.com/company/drylabs/"
