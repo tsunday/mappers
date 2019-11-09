@@ -7,10 +7,14 @@ from django.conf import settings
 from django.core import management
 
 
-def main():
-    apps.populate(settings.INSTALLED_APPS)
+def setup():
     management.call_command("migrate")
     management.call_command("loaddata", "examples.yaml")
+
+
+def main():
+    apps.populate(settings.INSTALLED_APPS)
+    setup()
     markdown_files = glob("**/*.md", recursive=True)
     exit_code = 0
     for markdown_file in markdown_files:
