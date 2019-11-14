@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         precommit:
-          python.version: "3.7"
+          python.version: "3.8"
           tox.env: precommit
         py27-django110:
           python.version: "2.7"
@@ -52,32 +52,35 @@ jobs:
         py37-django22:
           python.version: "3.7"
           tox.env: py37-django22
+        py38:
+          python.version: "3.8"
+          tox.env: py38
         flake8:
-          python.version: "3.7"
+          python.version: "3.8"
           tox.env: flake8
         mypy:
-          python.version: "3.7"
+          python.version: "3.8"
           tox.env: mypy
         importlint:
-          python.version: "3.7"
+          python.version: "3.8"
           tox.env: importlint
         mkdocs:
-          python.version: "3.7"
+          python.version: "3.8"
           tox.env: mkdocs
         vale:
-          python.version: "3.7"
+          python.version: "3.8"
           tox.env: vale
         doctest:
-          python.version: "3.7"
+          python.version: "3.8"
           tox.env: doctest
         remarklint:
-          python.version: "3.7"
+          python.version: "3.8"
           tox.env: remarklint
         yamllint:
-          python.version: "3.7"
+          python.version: "3.8"
           tox.env: yamllint
         jscpd:
-          python.version: "3.7"
+          python.version: "3.8"
           tox.env: jscpd
     steps:
       - task: UsePythonVersion@0

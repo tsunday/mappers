@@ -1,11 +1,12 @@
 import pytest
-from django.core import management
 
-from django_project import models
 from mappers import Mapper
 
 
 pytestmark = pytest.mark.django_db
+
+management = pytest.importorskip("django.core.management")
+models = pytest.importorskip("django_project.models")
 
 
 @pytest.fixture(scope="session", autouse=True)

@@ -9,12 +9,15 @@ def readers():
         import readers.annotations
 
         yield readers.annotations
-    except SyntaxError:
+    except (SyntaxError, ImportError):
         pass
 
-    import readers.arguments
+    try:
+        import readers.arguments
 
-    yield readers.arguments
+        yield readers.arguments
+    except (SyntaxError, ImportError):
+        pass
 
 
 @pytest.fixture(params=readers())
