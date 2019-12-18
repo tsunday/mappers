@@ -15,6 +15,14 @@
     name: ""
     about: ""
     avatar: ""
+- model: django_project.groupmodel
+  pk: 1
+  fields:
+    name: null
+- model: django_project.groupmodel
+  pk: 2
+  fields:
+    name: ""
 - model: django_project.chatmodel
   pk: 1
   fields:
@@ -33,3 +41,13 @@
   fields:
     user_id: 2
     text: ""
+- model: django_project.messagedeliverymodel
+  pk: 1
+  fields:
+    message_id: 1
+    service: ""
+- model: django_project.messagedeliverymodel
+  pk: 2
+  fields:
+    message_id: 2
+    service: ""

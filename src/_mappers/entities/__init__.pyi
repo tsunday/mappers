@@ -1,5 +1,5 @@
 from typing import Any
-from typing import Dict
+from typing import List
 from typing import Tuple
 from typing import Type
 
@@ -7,7 +7,7 @@ from typing_extensions import Protocol
 
 _Field = Type[Any]
 
-_Fields = Dict[str, _Field]
+_Fields = List[Tuple[str, _Field]]
 
 _Entity = Any
 

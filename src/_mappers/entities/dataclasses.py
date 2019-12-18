@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import inspect
 
 
@@ -17,7 +19,7 @@ def is_dataclass(entity):
 
 
 def get_fields(entity):
-    return {field.name: field.type for field in dataclasses.fields(entity)}
+    return [(field.name, field.type) for field in dataclasses.fields(entity)]
 
 
 def get_factory(fields, entity):

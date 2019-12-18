@@ -3,6 +3,14 @@ from _mappers.entities import dataclasses
 from _mappers.entities import pydantic
 
 
+def is_entity(entity):
+    return (
+        attrs.is_attrs(entity)
+        or dataclasses.is_dataclass(entity)
+        or pydantic.is_pydantic(entity)
+    )
+
+
 def entity_fields_factory(entity):
     if attrs.is_attrs(entity):
         fields = attrs.get_fields(entity)

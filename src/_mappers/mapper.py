@@ -2,6 +2,8 @@ import operator
 from typing import List
 from typing import Optional
 
+from _mappers.exceptions import MapperError
+
 
 class Evaluated(object):
     def __init__(self, name=None):
@@ -38,7 +40,7 @@ class ReaderGetter(object):
 
     def __call__(self, f):
         if self.ret is None:
-            self.ret = f.__annotations__["return"]
+            self.ret = getattr(f, "__annotations__", {}).get("return")
         return Reader(f, self.iterable, self.entity, self.ret)
 
     def of(self, ret):
@@ -67,4 +69,4 @@ def get_converter(ret, entity):
     elif ret == Optional[entity]:
         return operator.methodcaller("first")
     else:
-        return lambda x: x
+        raise MapperError

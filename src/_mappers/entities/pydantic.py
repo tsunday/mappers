@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import inspect
 
 
@@ -17,8 +19,8 @@ def is_pydantic(entity):
 
 
 def get_fields(entity):
-    return {key: field.type_ for key, field in entity.__fields__.items()}
+    return [(key, field.type_) for key, field in entity.__fields__.items()]
 
 
 def get_factory(fields, entity):
-    return lambda *row: entity(**{k: v for k, v in zip(fields, row)})
+    return lambda *row: entity(**{k: v for (k, t), v in zip(fields, row)})

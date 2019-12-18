@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import NewType
+from typing import Optional
 
 
 UserId = NewType("UserId", int)
@@ -14,6 +15,27 @@ class User:
     name: str
     about: str
     avatar: str
+
+
+GroupId = NewType("GroupId", int)
+
+
+@dataclass
+class Group:
+    primary_key: GroupId
+    name: str
+
+
+@dataclass
+class OptionalGroup:
+    primary_key: GroupId
+    name: Optional[str]
+
+
+@dataclass
+class UserGroup:
+    primary_key: GroupId
+    name: User
 
 
 ChatId = NewType("ChatId", int)
@@ -37,3 +59,34 @@ class Message:
 
     def written_by(self, user: User) -> bool:
         return self.user.primary_key == user.primary_key
+
+
+@dataclass
+class FlatMessage:
+    primary_key: MessageId
+    user_id: UserId
+    text: str
+
+
+@dataclass
+class NamedMessage:
+    primary_key: MessageId
+    username: str
+    text: str
+
+
+@dataclass
+class TotalMessage:
+    primary_key: MessageId
+    text: str
+    total: int
+
+
+DeliveryId = NewType("DeliveryId", int)
+
+
+@dataclass
+class Delivery:
+    primary_key: DeliveryId
+    message: Message
+    service: str

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import inspect
 
 
@@ -17,7 +19,7 @@ def is_attrs(entity):
 
 
 def get_fields(entity):
-    return {attribute.name: attribute.type for attribute in entity.__attrs_attrs__}
+    return [(attribute.name, attribute.type) for attribute in entity.__attrs_attrs__]
 
 
 def get_factory(fields, entity):

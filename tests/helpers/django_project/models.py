@@ -9,6 +9,10 @@ class UserModel(models.Model):
     avatar = models.FileField()
 
 
+class GroupModel(models.Model):
+    name = models.CharField(max_length=255, null=True)
+
+
 class ChatModel(models.Model):
     name = models.CharField(max_length=255)
     subscribers = models.ManyToManyField(
@@ -30,3 +34,10 @@ class MessageModel(models.Model):
         "UserModel", related_name="messages", on_delete=models.CASCADE
     )
     text = models.TextField()
+
+
+class MessageDeliveryModel(models.Model):
+    message = models.ForeignKey(
+        "MessageModel", related_name="deliveries", on_delete=models.CASCADE,
+    )
+    service = models.CharField(max_length=100)
