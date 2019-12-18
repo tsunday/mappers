@@ -11,16 +11,16 @@ except ImportError:
     IS_AVAILABLE = False
 
 
-def is_attrs(entity):
+def _is_attrs(entity):
     if IS_AVAILABLE:
         return inspect.isclass(entity) and attr.has(entity)
     else:
         return False
 
 
-def get_fields(entity):
+def _get_fields(entity):
     return [(attribute.name, attribute.type) for attribute in entity.__attrs_attrs__]
 
 
-def get_factory(fields, entity):
+def _get_factory(fields, entity):
     return entity

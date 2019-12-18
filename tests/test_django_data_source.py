@@ -1,3 +1,4 @@
+"""Tests related to the Django models data source."""
 from logging import Logger
 
 import pytest
@@ -71,6 +72,8 @@ def test_result_list_converter(e, r):
 
 def test_result_object_converter(e, r):
     """
+    Return a single object.
+
     If instead of converter annotation will be an entity class, we
     should return a single object.  Not a collection.
     """
@@ -88,6 +91,8 @@ def test_result_object_converter(e, r):
 
 def test_result_optional_converter(e, r):
     """
+    Return a single object or None.
+
     If annotation of the reader will be an optional entity class, we
     should not raise DoesNotExist error.  Instead of this we will
     return None.
@@ -108,6 +113,8 @@ def test_result_optional_converter(e, r):
 @pytest.mark.parametrize("value", [None, False, Logger])
 def test_result_unknown_converter(e, r, value):
     """
+    Raise error in unclear situation.
+
     If annotation of the reader will be something unknown, we should
     raise MapperError.
     """
@@ -127,6 +134,8 @@ def test_result_unknown_converter(e, r, value):
 
 def test_nested_mapper(e, r):
     """
+    Set mapper as a field of another mapper.
+
     Entities could contains nested entities.  Mappers of nested
     entities should be expressed as nested mappers in the config.
 
@@ -155,6 +164,8 @@ def test_nested_mapper(e, r):
 
 def test_deep_nested_mapper(e, r):
     """
+    Set mapper as a field of another field.
+
     Nested entities could contain nested entities as well.  Mappers of
     nested entities should contain nested mappers as well.
 
@@ -195,6 +206,8 @@ def test_deep_nested_mapper(e, r):
 
 def test_related_field(e, r):
     """
+    Set field of the related data source to the entity field.
+
     Mapper could point any field of the entity to any field of any
     related model of the mapped data source.
     """
@@ -220,6 +233,8 @@ def test_related_field(e, r):
 
 def test_resolve_id_field_from_foreign_key_without_config(e, r):
     """
+    Use foreign key as a field.
+
     Original data source model could have foreign key field defined.
     The actual entity may require only id value with out whole related
     object.
@@ -248,6 +263,8 @@ def test_resolve_id_field_from_foreign_key_without_config(e, r):
 
 def test_evaluated_field(e, r):
     """
+    Evaluate fields which are not declared in the data source.
+
     Evaluated marker should be interpreted as a reason to ignore
     absence of the field directly on the data source model.  Field
     with exactly this name will appears on the collection.
@@ -272,6 +289,8 @@ def test_evaluated_field(e, r):
 
 def test_named_evaluated_field(e, r):
     """
+    Use custom name in the data source for the evaluation result.
+
     Evaluated marker could be pointed to the field with a different
     name than the target attribute.
     """
@@ -300,6 +319,8 @@ def test_named_evaluated_field(e, r):
 
 def test_data_source_field_missing(e):
     """
+    Detect if data source field set is not complete.
+
     Raise exception if data source missed some fields required by
     entity.  And there is no configuration related to the field.
     """
@@ -316,6 +337,8 @@ def test_data_source_field_missing(e):
 
 def test_nullable_field_validation(e):
     """
+    Detect if data source field breaks the contract.
+
     Data source cannot have nullable field if corresponding entity
     attribute is not annotated with Optional type.
     """
@@ -330,6 +353,8 @@ def test_nullable_field_validation(e):
 
 def test_nullable_field_optional_attribute(e, r):
     """
+    Detect if data source field follows the contract.
+
     Data source can have nullable field if corresponding entity
     attribute annotated with Optional type.
     """
@@ -351,6 +376,8 @@ def test_nullable_field_optional_attribute(e, r):
 
 def test_nested_entities_field_validation(e):
     """
+    Detect if data source relations breaks the contract.
+
     Entity cannot have nested entity field whily data source field is
     not a relation field.
     """
@@ -366,6 +393,8 @@ def test_nested_entities_field_validation(e):
 @pytest.mark.parametrize("value", ["text", Evaluated()])
 def test_nested_entities_config_validation(e, value):
     """
+    Detect invalid config definition.
+
     Mapper cannot have definition of the nested entity field which is
     not a Mapper.
     """

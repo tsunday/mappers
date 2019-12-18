@@ -1,7 +1,4 @@
 """
-mappers.exceptions
-------------------
-
 This module contains the set of mappers' exceptions.
 
 :copyright: (c) 2019 by dry-python team.

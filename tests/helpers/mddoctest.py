@@ -7,14 +7,14 @@ from django.conf import settings
 from django.core import management
 
 
-def setup():
+def _setup():
     management.call_command("migrate")
     management.call_command("loaddata", "examples.yaml")
 
 
-def main():
+def _main():
     apps.populate(settings.INSTALLED_APPS)
-    setup()
+    _setup()
     markdown_files = glob("**/*.md", recursive=True)
     exit_code = 0
     for markdown_file in markdown_files:
@@ -24,4 +24,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    _main()

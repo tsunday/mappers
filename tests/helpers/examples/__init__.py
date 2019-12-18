@@ -4,7 +4,7 @@ import pytest
 # Fixtures.
 
 
-def entities():
+def _entities():
     try:
         import examples.dataclasses
 
@@ -40,6 +40,7 @@ def entities():
         pass
 
 
-@pytest.fixture(params=entities())
+@pytest.fixture(params=_entities())
 def e(request):
+    """Parametrized fixture with all possible entity definitions."""
     return request.param

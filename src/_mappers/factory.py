@@ -1,20 +1,21 @@
-from _mappers.entities import entity_fields_factory
-from _mappers.mapper import LazyMapper
-from _mappers.mapper import Mapper
-from _mappers.sources import data_source_factory
+from _mappers.entities import _entity_fields_factory
+from _mappers.mapper import _LazyMapper
+from _mappers.mapper import _Mapper
+from _mappers.sources import _data_source_factory
 
 
 def mapper_factory(entity=None, data_source=None, config=None):
-    entity, data_source, config = decompose(entity, data_source, config)
+    """Define declarative mapper from data source to domain entity."""
+    entity, data_source, config = _decompose(entity, data_source, config)
     assert isinstance(config, dict)
     if entity and data_source:
-        iterable = configure(entity, data_source, config)
-        return Mapper(entity, data_source, config, iterable)
+        iterable = _configure(entity, data_source, config)
+        return _Mapper(entity, data_source, config, iterable)
     else:
-        return LazyMapper(config)
+        return _LazyMapper(config)
 
 
-def decompose(first, second, third):
+def _decompose(first, second, third):
     if first is None and second is None and third is None:
         return None, None, {}
     elif isinstance(first, dict) and second is None and third is None:
@@ -25,7 +26,7 @@ def decompose(first, second, third):
         raise Exception
 
 
-def configure(entity, data_source, config):
-    fields, entity_factory = entity_fields_factory(entity)
-    iterable = data_source_factory(fields, entity_factory, data_source, config)
+def _configure(entity, data_source, config):
+    fields, entity_factory = _entity_fields_factory(entity)
+    iterable = _data_source_factory(fields, entity_factory, data_source, config)
     return iterable

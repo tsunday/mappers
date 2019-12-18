@@ -4,7 +4,7 @@ import pytest
 # Fixtures.
 
 
-def readers():
+def _readers():
     try:
         import readers.annotations
 
@@ -20,6 +20,7 @@ def readers():
         pass
 
 
-@pytest.fixture(params=readers())
+@pytest.fixture(params=_readers())
 def r(request):
+    """Parametrized fixture with all possible reader definitions."""
     return request.param

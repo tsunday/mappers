@@ -17,7 +17,7 @@ except ImportError:
         pass
 
 
-def is_optional(t):
+def _is_optional(t):
     return (
         isinstance(t, (_GenericAlias, _Union))
         and t.__origin__ is Union
