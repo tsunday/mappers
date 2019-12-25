@@ -47,7 +47,7 @@ def _validate_fields(fields, data_source, config):
             _validate_field(target_field[-1], field_type, model)
         else:
             raise Exception(
-                "Unknown config value %s in the '%s' field" % (target_field, field)
+                "Unknown config value {} in the '{}' field".format(target_field, field)
             )
 
 
@@ -79,7 +79,7 @@ def _get_data_source_field(name, data_source):
             return field
     else:
         raise MapperError(
-            "Can not find '%s' field in the %s model" % (name, data_source)
+            "Can not find '{}' field in the {} model".format(name, data_source)
         )
 
 
