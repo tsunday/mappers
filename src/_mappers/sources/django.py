@@ -36,13 +36,17 @@ def _validate_fields(fields, data_source, config):
         elif isinstance(target_field, str):
             _validate_field(target_field, field_type, data_source)
         elif isinstance(target_field, tuple):
-            assert len(target_field) > 1
-            assert all(isinstance(path_field, str) for path_field in target_field)
+            if not len(target_field) > 1:
+                raise AssertionError
+            if not all(isinstance(path_field, str) for path_field in target_field):
+                raise AssertionError
             model = data_source
             for path_field in target_field[:-1]:
                 model_field = _get_data_source_field(path_field, model)
-                assert model_field.is_relation
-                assert getattr(model_field, "attname", False)
+                if not model_field.is_relation:
+                    raise AssertionError
+                if not getattr(model_field, "attname", False):
+                    raise AssertionError
                 model = model_field.related_model
             _validate_field(target_field[-1], field_type, model)
         else:
@@ -65,8 +69,10 @@ def _validate_evaluated_field(field_type):
 
 def _validate_mapper_field(field, field_type, lazy_mapper, data_source):
     model_field = _get_data_source_field(field, data_source)
-    assert model_field.is_relation
-    assert getattr(model_field, "attname", False)
+    if not model_field.is_relation:
+        raise AssertionError
+    if not getattr(model_field, "attname", False):
+        raise AssertionError
     mapper = lazy_mapper.build(field_type, model_field.related_model)
     return mapper
 

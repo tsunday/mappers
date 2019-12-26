@@ -7,7 +7,8 @@ from _mappers.sources import _data_source_factory
 def mapper_factory(entity=None, data_source=None, config=None):
     """Define declarative mapper from data source to domain entity."""
     entity, data_source, config = _decompose(entity, data_source, config)
-    assert isinstance(config, dict)
+    if not isinstance(config, dict):
+        raise AssertionError
     if entity and data_source:
         iterable = _configure(entity, data_source, config)
         return _Mapper(entity, data_source, config, iterable)
