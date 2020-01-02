@@ -94,6 +94,9 @@ jobs:
         jscpd:
           python.version: "3.8"
           tox.env: jscpd
+        commitlint:
+          python.version: "3.8"
+          tox.env: commitlint
     steps:
       - task: UsePythonVersion@0
         inputs:
