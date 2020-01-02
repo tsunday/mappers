@@ -56,6 +56,22 @@ def test_tox_environments_includes_python_versions():
         assert version in tox_environments
 
 
+def test_tox_environments_use_max_base_python():
+    """
+    Every Tox environment with base Python specified should use max Python version.
+
+    Max Python version is assumed from the .python-versions file.
+    """
+    pyenv_version = max(
+        sorted(
+            "python{}.{}".format(*v.split(".")[0:2])
+            for v in open(".python-version").read().splitlines()
+        )
+    )
+    for _env, basepython in helpers.tox_info("basepython"):
+        assert basepython == pyenv_version
+
+
 def test_tox_environments_equal_azure_tasks():
     """
     Every tox environment should present in the Azure Pipeline task list.
@@ -72,12 +88,20 @@ def test_tox_environments_equal_azure_tasks():
     assert tox_environments == azure_tasks
 
 
+def test_azure_task_names_equals_tox_environments():
+    """The name of the task should equals the name of the environment as well."""
+    azure_pipelines = yaml.safe_load(open("azure-pipelines.yml").read())
+    for k, v in azure_pipelines["jobs"][0]["strategy"]["matrix"].items():
+        assert k == v["tox.env"]
+
+
 def test_tox_environment_base_python_equal_azure_task_python_version():
     """
     Python version should present in the Azure Pipeline task list.
 
-    Python version of the Tox environment should be equal to the version
-    of the corresponding Azure Pipeline task.
+    Python version of the Tox environment should be equal to the
+    version of the corresponding Azure Pipeline task.  Python version
+    of the environment should be specified in the base python option.
     """
     azure_pipelines = yaml.safe_load(open("azure-pipelines.yml").read())
     azure_tasks = {
@@ -89,6 +113,24 @@ def test_tox_environment_base_python_equal_azure_task_python_version():
         env = re.sub(r"^testenv:", "", env)
         basepython = re.sub(r"^python", "", basepython)
         assert basepython == azure_tasks[env]
+
+
+def test_tox_generative_environments_equal_azure_task_python_version():
+    """
+    Python version should present in the Azure Pipeline task list.
+
+    Python version of the generative Tox environment should equal to
+    the version of the corresponding Azure Pipeline task.  Python
+    version of the environment should be specified in its name.
+    """
+    azure_pipelines = yaml.safe_load(open("azure-pipelines.yml").read())
+    azure_tasks = {
+        k.split("-")[0].replace("py", ""): v["python.version"].replace(".", "")
+        for k, v in azure_pipelines["jobs"][0]["strategy"]["matrix"].items()
+        if k.startswith("py")
+    }
+    for k, v in azure_tasks.items():
+        assert k == v
 
 
 def test_tox_deps_are_ordered():
