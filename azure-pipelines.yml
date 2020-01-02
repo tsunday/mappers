@@ -114,6 +114,13 @@ jobs:
           echo '##vso[task.prependpath]$(system.defaultWorkingDirectory)/bin'
         condition: in(variables['tox.env'], 'vale')
         displayName: Install Vale.
+      - script: |
+          git remote set-branches origin master
+          git fetch --unshallow --quiet
+          git checkout master --quiet
+          git checkout - --quiet
+        condition: in(variables['tox.env'], 'commitlint')
+        displayName: Unshallow commit log.
       - script: tox -e $(tox.env)
         displayName: Run Tox.
       - script: |
