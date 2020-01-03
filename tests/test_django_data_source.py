@@ -444,6 +444,27 @@ def test_related_field_validation(e):
     assert message == expected
 
 
+def test_related_field_length_validation(e):
+    """
+    Detect invalid config definition.
+
+    Related field could not have place in the same data source as its
+    entity.  Therefore, related field definition could not have length
+    of one.
+    """
+    expected = ""
+
+    with pytest.raises(MapperError) as exc_info:
+        Mapper(
+            e.NamedMessage,
+            models.MessageModel,
+            {"primary_key": "id", "username": ("text",)},
+        )
+
+    message = str(exc_info.value)
+    assert message == expected
+
+
 def test_related_field_type_validation(e):
     """
     Detect invalid config definition.

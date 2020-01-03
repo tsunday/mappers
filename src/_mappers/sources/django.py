@@ -37,7 +37,7 @@ def _validate_fields(fields, data_source, config):
             _validate_field(target_field, field_type, data_source)
         elif isinstance(target_field, tuple):
             if not len(target_field) > 1:
-                raise AssertionError
+                raise MapperError
             if not all(isinstance(path_field, str) for path_field in target_field):
                 raise MapperError
             model = data_source
