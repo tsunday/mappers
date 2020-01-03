@@ -442,3 +442,24 @@ def test_related_field_validation(e):
 
     message = str(exc_info.value)
     assert message == expected
+
+
+def test_related_field_type_validation(e):
+    """
+    Detect invalid config definition.
+
+    Related field definition in the mapper config should be a tuple of
+    strings.  We can not have arbitrary objects in the field
+    definition.
+    """
+    expected = ""
+
+    with pytest.raises(MapperError) as exc_info:
+        Mapper(
+            e.NamedMessage,
+            models.MessageModel,
+            {"primary_key": "id", "username": ("user", object())},
+        )
+
+    message = str(exc_info.value)
+    assert message == expected
