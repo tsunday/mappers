@@ -444,6 +444,26 @@ def test_related_field_validation(e):
     assert message == expected
 
 
+def test_related_field_kind_validation(e):
+    """
+    Detect invalid config definition.
+
+    If mapper defines related field, the corresponding data source
+    field should resolve to only one object.
+    """
+    expected = ""
+
+    with pytest.raises(MapperError) as exc_info:
+        Mapper(
+            e.Chat,
+            models.ChatModel,
+            {"primary_key": "id", "is_hidden": ("subscribers", "name")},
+        )
+
+    message = str(exc_info.value)
+    assert message == expected
+
+
 def test_related_field_length_validation(e):
     """
     Detect invalid config definition.
