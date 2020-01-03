@@ -58,6 +58,15 @@ class Chat:
     is_hidden: bool
 
 
+@dataclass
+class UserChat:
+    """Chat domain model."""
+
+    primary_key: ChatId
+    name: str
+    subscribers: User
+
+
 MessageId = NewType("MessageId", int)
 
 

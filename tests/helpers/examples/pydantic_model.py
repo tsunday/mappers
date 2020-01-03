@@ -54,6 +54,14 @@ class Chat(BaseModel):
     is_hidden: bool
 
 
+class UserChat(BaseModel):
+    """Chat domain model."""
+
+    primary_key: ChatId
+    name: str
+    subscribers: User
+
+
 MessageId = NewType("MessageId", int)
 
 

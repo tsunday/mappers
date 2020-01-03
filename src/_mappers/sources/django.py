@@ -71,8 +71,8 @@ def _validate_mapper_field(field, field_type, lazy_mapper, data_source):
     model_field = _get_data_source_field(field, data_source)
     if not model_field.is_relation:
         raise MapperError
-    if not getattr(model_field, "attname", False):
-        raise AssertionError
+    if model_field.many_to_many:
+        raise MapperError
     mapper = lazy_mapper.build(field_type, model_field.related_model)
     return mapper
 

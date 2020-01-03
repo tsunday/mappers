@@ -407,6 +407,26 @@ def test_nested_entities_validation(e):
     assert message == expected
 
 
+def test_nested_entities_kind_validation(e):
+    """
+    Detect if data source relations breaks the contract.
+
+    If entity have a nested entity as its field, the corresponding
+    data source field should resolve to only one object.
+    """
+    expected = ""
+
+    with pytest.raises(MapperError) as exc_info:
+        Mapper(
+            e.UserChat,
+            models.ChatModel,
+            {"primary_key": "id", "subscribers": Mapper({"primary_key": "id"})},
+        )
+
+    message = str(exc_info.value)
+    assert message == expected
+
+
 @pytest.mark.parametrize("value", ["text", Evaluated()])
 def test_nested_entities_type_validation(e, value):
     """

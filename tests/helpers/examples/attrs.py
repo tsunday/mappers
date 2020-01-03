@@ -60,6 +60,15 @@ class Chat(object):
     is_hidden = attrib(type=bool)
 
 
+@attrs
+class UserChat(object):
+    """Chat domain model."""
+
+    primary_key = attrib(type=ChatId)
+    name = attrib(type=str)
+    subscribers = attrib(type=User)
+
+
 MessageId = NewType("MessageId", int)
 
 
