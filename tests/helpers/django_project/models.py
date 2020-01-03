@@ -1,6 +1,9 @@
 from django.db import models
 
 
+iterable_class = models.QuerySet
+
+
 class UserModel(models.Model):
     """User table."""
 

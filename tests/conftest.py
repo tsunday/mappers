@@ -1,3 +1,3 @@
 """Settings module for the Py.test tool."""
 
-pytest_plugins = ["examples", "readers"]
+pytest_plugins = ["examples", "models", "readers"]

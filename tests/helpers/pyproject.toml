@@ -8,6 +8,7 @@ packages = [
     { include = "examples" },
     { include = "helpers.py" },
     { include = "mddoctest.py"},
+    { include = "models.py" },
     { include = "readers" },
 ]
 
