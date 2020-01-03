@@ -391,29 +391,29 @@ def test_nullable_field_optional_attribute(e, r):
     assert group2.name == ""
 
 
-def test_nested_entities_field_validation(e):
+def test_nested_entities_validation(e):
     """
     Detect if data source relations breaks the contract.
 
-    Entity cannot have nested entity field whily data source field is
-    not a relation field.
+    If entity have a nested entity as its field, a corresponding data
+    source field should be a relation object.
     """
     expected = ""
 
     with pytest.raises(MapperError) as exc_info:
-        Mapper(e.UserGroup, models.GroupModel, {"primary_key": "id"})
+        Mapper(e.UserGroup, models.GroupModel, {"primary_key": "id", "name": Mapper()})
 
     message = str(exc_info.value)
     assert message == expected
 
 
 @pytest.mark.parametrize("value", ["text", Evaluated()])
-def test_nested_entities_config_validation(e, value):
+def test_nested_entities_type_validation(e, value):
     """
     Detect invalid config definition.
 
-    Mapper cannot have definition of the nested entity field which is
-    not a Mapper.
+    If entity have a nested entity as its field, the mapper cannot
+    have config definition of that field which is not a Mapper.
     """
     expected = ""
 
@@ -428,8 +428,8 @@ def test_related_field_validation(e):
     """
     Detect invalid config definition.
 
-    Mapper can not have related field definition if corresponding data
-    source field is not a relation object.
+    If the mapper defines a related field, a corresponding data source
+    field should be a relation object.
     """
     expected = ""
 

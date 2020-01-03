@@ -70,7 +70,7 @@ def _validate_evaluated_field(field_type):
 def _validate_mapper_field(field, field_type, lazy_mapper, data_source):
     model_field = _get_data_source_field(field, data_source)
     if not model_field.is_relation:
-        raise AssertionError
+        raise MapperError
     if not getattr(model_field, "attname", False):
         raise AssertionError
     mapper = lazy_mapper.build(field_type, model_field.related_model)
