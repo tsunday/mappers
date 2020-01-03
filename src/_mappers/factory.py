@@ -1,4 +1,5 @@
 from _mappers.entities import _entity_fields_factory
+from _mappers.exceptions import MapperError
 from _mappers.mapper import _LazyMapper
 from _mappers.mapper import _Mapper
 from _mappers.sources import _data_source_factory
@@ -8,7 +9,7 @@ def mapper_factory(entity=None, data_source=None, config=None):
     """Define declarative mapper from data source to domain entity."""
     entity, data_source, config = _decompose(entity, data_source, config)
     if not isinstance(config, dict):
-        raise AssertionError
+        raise MapperError
     if entity and data_source:
         iterable = _configure(entity, data_source, config)
         return _Mapper(entity, data_source, config, iterable)
@@ -24,7 +25,7 @@ def _decompose(first, second, third):
     elif first is not None and second is not None:
         return first, second, third or {}
     else:
-        raise Exception
+        raise MapperError
 
 
 def _configure(entity, data_source, config):

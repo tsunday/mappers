@@ -317,6 +317,23 @@ def test_named_evaluated_field(e, r):
 # Validation.
 
 
+def test_config_type(e):
+    """Config argument should be a dict."""
+    expected = ""
+
+    with pytest.raises(MapperError) as exc_info:
+        Mapper(object())
+
+    message = str(exc_info.value)
+    assert message == expected
+
+    with pytest.raises(MapperError) as exc_info:
+        Mapper(e.User, models.UserModel, object())
+
+    message = str(exc_info.value)
+    assert message == expected
+
+
 def test_data_source_field_missing(e):
     """
     Detect if data source field set is not complete.
