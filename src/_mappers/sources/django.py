@@ -44,7 +44,7 @@ def _validate_fields(fields, data_source, config):
             for path_field in target_field[:-1]:
                 model_field = _get_data_source_field(path_field, model)
                 if not model_field.is_relation:
-                    raise AssertionError
+                    raise MapperError
                 if not getattr(model_field, "attname", False):
                     raise AssertionError
                 model = model_field.related_model

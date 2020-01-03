@@ -317,7 +317,7 @@ def test_named_evaluated_field(e, r):
 # Validation.
 
 
-def test_config_type(e):
+def test_config_type_validation(e):
     """Config argument should be a dict."""
     expected = ""
 
@@ -419,6 +419,26 @@ def test_nested_entities_config_validation(e, value):
 
     with pytest.raises(MapperError) as exc_info:
         Mapper(e.Message, models.MessageModel, {"primary_key": "id", "user": value})
+
+    message = str(exc_info.value)
+    assert message == expected
+
+
+def test_related_field_validation(e):
+    """
+    Detect invalid config definition.
+
+    Mapper can not have related field definition if corresponding data
+    source field is not a relation object.
+    """
+    expected = ""
+
+    with pytest.raises(MapperError) as exc_info:
+        Mapper(
+            e.NamedMessage,
+            models.MessageModel,
+            {"primary_key": "id", "username": ("text", "name")},
+        )
 
     message = str(exc_info.value)
     assert message == expected
