@@ -8,13 +8,12 @@ from django.core import management
 
 
 def _setup():
+    apps.populate(settings.INSTALLED_APPS)
     management.call_command("migrate")
     management.call_command("loaddata", "examples.yaml")
 
 
 def _main():
-    apps.populate(settings.INSTALLED_APPS)
-    _setup()
     markdown_files = glob("**/*.md", recursive=True)
     exit_code = 0
     for markdown_file in markdown_files:
@@ -24,4 +23,5 @@ def _main():
 
 
 if __name__ == "__main__":
+    _setup()
     _main()
