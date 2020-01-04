@@ -18,15 +18,33 @@ def mapper_factory(entity=None, data_source=None, config=None):
         return _LazyMapper(config)
 
 
-def _decompose(first, second, third):
-    if first is None and second is None and third is None:
-        return None, None, {}
-    elif isinstance(first, dict) and second is None and third is None:
-        return None, None, first
-    elif first is not None and second is not None:
-        return first, second, third or {}
-    else:
-        raise MapperError
+def _decompose(*args):
+    args = tuple(filter(None, args))
+    return arguments[len(args)](*args)
+
+
+def _no_arguments():
+    return None, None, {}
+
+
+def _config_only(config):
+    return None, None, config
+
+
+def _entity_and_data_source(entity, data_source):
+    return entity, data_source, {}
+
+
+def _everything(entity, data_source, config):
+    return entity, data_source, config
+
+
+arguments = {
+    0: _no_arguments,
+    1: _config_only,
+    2: _entity_and_data_source,
+    3: _everything,
+}
 
 
 def _configure(entity, data_source, config):
