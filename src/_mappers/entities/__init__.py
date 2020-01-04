@@ -1,6 +1,7 @@
 from _mappers.entities import attrs
 from _mappers.entities import dataclasses
 from _mappers.entities import pydantic
+from _mappers.exceptions import MapperError
 
 
 def _entity_factory(entity):
@@ -17,4 +18,4 @@ def _entity_factory(entity):
         factory = attrs._get_factory(fields, entity)
         return fields, factory
     else:
-        raise Exception
+        raise MapperError

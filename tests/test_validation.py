@@ -12,6 +12,16 @@ pytestmark = pytest.mark.django_db
 # Validation.
 
 
+def test_entity_type_validation(m):
+    """Entity argument should be a dataclass, pydantic, or attrs class."""
+    expected = ""
+
+    with pytest.raises(MapperError) as exc_info:
+        Mapper(object(), m.UserModel)
+    message = str(exc_info.value)
+    assert message == expected
+
+
 def test_config_type_validation(e, m):
     """Config argument should be a dict."""
     expected = ""
