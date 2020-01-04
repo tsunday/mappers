@@ -9,38 +9,45 @@ from typing import Union
 
 from _mappers.entities import _EntityClass
 from _mappers.sources import _DataSource
-from _mappers.sources.django import ValuesList
+from _mappers.sources.django import _ValuesList
 
-_Config = Dict[str, Union[str, LazyMapper, Mapper, Evaluated, Tuple[str, ...]]]
+_RelatedField = Tuple[str, ...]
+
+_ConfigValue = Union[str, _LazyMapper, Evaluated, _RelatedField]
+
+_Config = Dict[str, _ConfigValue]
 
 class Evaluated:
     def __init__(self, name: Optional[str] = ...) -> None: ...
 
-class LazyMapper:
+class _LazyMapper:
     def __init__(self, config: _Config) -> None: ...
-    def build(self, entity: _EntityClass, data_source: _DataSource) -> Mapper: ...
 
-class Mapper:
+class _Mapper:
     def __init__(
         self,
         entity: _EntityClass,
         data_source: _DataSource,
         config: _Config,
-        iterable: ValuesList,
+        iterable: _ValuesList,
     ) -> None: ...
     @property
-    def reader(self) -> ReaderGetter: ...
+    def reader(self) -> _ReaderGetter: ...
 
-class ReaderGetter:
-    def __init__(self, iterable: ValuesList, entity: _EntityClass) -> None: ...
-    def __call__(self, f: Callable) -> Reader: ...
-    def of(self, ret: _SpecialForm) -> ReaderGetter: ...
+class _ReaderGetter:
+    def __init__(self, iterable: _ValuesList, entity: _EntityClass) -> None: ...
+    def __call__(self, f: Callable) -> _Reader: ...
+    def of(self, ret: _SpecialForm) -> _ReaderGetter: ...
 
-class Reader:
+class _Reader:
     def __init__(
-        self, f: Callable, iterable: ValuesList, entity: _EntityClass, ret: _SpecialForm
+        self,
+        f: Callable,
+        iterable: _ValuesList,
+        entity: _EntityClass,
+        ret: _SpecialForm,
     ) -> None: ...
     def __call__(self, *args: Any, **kwargs: Any) -> Any: ...
     def raw(self, *args: Any, **kwargs: Any) -> Iterable: ...
 
-def get_converter(ret: _SpecialForm, entity: _EntityClass) -> Callable: ...
+def _get_converter(ret: _SpecialForm, entity: _EntityClass) -> Callable: ...

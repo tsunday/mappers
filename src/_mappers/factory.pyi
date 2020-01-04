@@ -1,38 +1,35 @@
 from typing import Optional
 from typing import overload
 from typing import Tuple
-from typing import Type
-from typing import TypeVar
+from typing import Union
 
+from _mappers.entities import _Entity
 from _mappers.mapper import _Config
-from _mappers.mapper import LazyMapper
-from _mappers.mapper import Mapper
+from _mappers.mapper import _LazyMapper
+from _mappers.mapper import _Mapper
 from _mappers.sources import _DataSource
-from _mappers.sources.django import ValuesList
+from _mappers.sources.django import _ValuesList
 @overload
-def mapper_factory() -> LazyMapper: ...
+def mapper_factory() -> _LazyMapper: ...
 @overload
-def mapper_factory(entity: Type, data_source: _DataSource) -> Mapper: ...
+def mapper_factory(entity: _Entity, data_source: _DataSource) -> _Mapper: ...
 @overload
-def mapper_factory(config: _Config) -> LazyMapper: ...
+def mapper_factory(config: _Config) -> _LazyMapper: ...
 @overload
 def mapper_factory(
-    entity: Type, data_source: _DataSource, config: _Config
-) -> Mapper: ...
-
-_T = TypeVar("_T")
-@overload
-def decompose(
-    first: None, second: None, third: None,
-) -> Tuple[None, None, _Config]: ...
-@overload
-def decompose(
-    first: _Config, second: None, third: None,
-) -> Tuple[None, None, _Config]: ...
-@overload
-def decompose(
-    first: _T, second: _DataSource, third: Optional[_Config],
-) -> Tuple[_T, _DataSource, _Config]: ...
-def configure(
-    entity: Type, data_source: _DataSource, config: _Config
-) -> ValuesList: ...
+    entity: _Entity, data_source: _DataSource, config: _Config
+) -> _Mapper: ...
+def _decompose(
+    *args: Optional[Union[_Entity, _DataSource, _Config]]
+) -> Tuple[Optional[_Entity], Optional[_DataSource], _Config]: ...
+def _no_arguments() -> Tuple[None, None, _Config]: ...
+def _config_only(config: _Config) -> Tuple[None, None, _Config]: ...
+def _entity_and_data_source(
+    entity: _Entity, data_source: _DataSource
+) -> Tuple[_Entity, _DataSource, _Config]: ...
+def _everything(
+    entity: _Entity, data_source: _DataSource, config: _Config
+) -> Tuple[_Entity, _DataSource, _Config]: ...
+def _configure(
+    entity: _Entity, data_source: _DataSource, config: _Config
+) -> _ValuesList: ...
