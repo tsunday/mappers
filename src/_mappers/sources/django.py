@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 
-from _mappers.mapper import _LazyMapper
 from _mappers.mapper import _Mapper
 from _mappers.mapper import Evaluated
 
@@ -78,28 +77,34 @@ class _ValuesList(object):
 
 
 def _get_values_list_arguments(fields, mapping):
-
     result = []
-
     for field, _field_type in fields:
-        value = mapping[field]
-        if isinstance(value, _Mapper):
-            result.extend(
-                field + "__" + argument for argument in value.iterable.arguments
-            )
-            continue
-        elif isinstance(value, Evaluated):
-            if value.name is None:
-                value = field
-            else:
-                value = value.name
-        elif isinstance(value, tuple):
-            value = "__".join(value)
-        elif isinstance(value, _LazyMapper):
-            raise RuntimeError
-        result.append(value)
-
+        result.extend(builders[type(mapping[field])](field, mapping[field]))
     return tuple(result)
+
+
+def _build_mapper_argument(field, value):
+    return [field + "__" + argument for argument in value.iterable.arguments]
+
+
+def _build_evaluated_argument(field, value):
+    return [value.name or field]
+
+
+def _build_related_argument(field, value):
+    return ["__".join(value)]
+
+
+def _build_field_argument(field, value):
+    return [value]
+
+
+builders = {
+    _Mapper: _build_mapper_argument,
+    Evaluated: _build_evaluated_argument,
+    tuple: _build_related_argument,
+    str: _build_field_argument,
+}
 
 
 def _get_values_list_iterable_class(entity_factory, fields, mapping):
