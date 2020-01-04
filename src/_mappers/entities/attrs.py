@@ -8,7 +8,7 @@ try:
     import attr
 
     IS_AVAILABLE = True
-except ImportError:
+except ImportError:  # pragma: no cover
     IS_AVAILABLE = False
 
 
@@ -16,7 +16,7 @@ def _is_attrs(entity):
     if IS_AVAILABLE:
         return inspect.isclass(entity) and attr.has(entity)
     else:
-        return False
+        return False  # pragma: no cover
 
 
 def _get_fields(entity):
