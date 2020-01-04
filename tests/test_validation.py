@@ -94,7 +94,7 @@ def test_nested_entities_validation(e, m):
     expected = ""
 
     with pytest.raises(MapperError) as exc_info:
-        Mapper(e.UserGroup, m.GroupModel, {"primary_key": "id", "name": Mapper()})
+        Mapper(e.UserGroup, m.GroupModel, {"primary_key": "id"})
 
     message = str(exc_info.value)
     assert message == expected

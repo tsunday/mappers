@@ -2,6 +2,8 @@ from __future__ import absolute_import
 
 import inspect
 
+from _mappers.compat import _is_optional
+
 
 try:
     import dataclasses
@@ -19,7 +21,17 @@ def _is_dataclass(entity):
 
 
 def _get_fields(entity):
-    return [(field.name, field.type) for field in dataclasses.fields(entity)]
+    return [
+        (
+            field.name,
+            {
+                "is_optional": _is_optional(field.type),
+                "is_entity": _is_dataclass(field.type),
+                "type": field.type,
+            },
+        )
+        for field in dataclasses.fields(entity)
+    ]
 
 
 def _get_factory(fields, entity):

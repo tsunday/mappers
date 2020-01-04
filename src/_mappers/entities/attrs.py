@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 import inspect
 
+from _mappers.compat import _is_optional
 
 try:
     import attr
@@ -19,7 +20,17 @@ def _is_attrs(entity):
 
 
 def _get_fields(entity):
-    return [(attribute.name, attribute.type) for attribute in entity.__attrs_attrs__]
+    return [
+        (
+            attribute.name,
+            {
+                "is_optional": _is_optional(attribute.type),
+                "is_entity": _is_attrs(attribute.type),
+                "type": attribute.type,
+            },
+        )
+        for attribute in entity.__attrs_attrs__
+    ]
 
 
 def _get_factory(fields, entity):

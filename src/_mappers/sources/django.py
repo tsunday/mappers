@@ -1,8 +1,5 @@
 from __future__ import absolute_import
 
-from _mappers.compat import _is_optional
-from _mappers.entities import _is_entity
-from _mappers.exceptions import MapperError
 from _mappers.mapper import _LazyMapper
 from _mappers.mapper import _Mapper
 from _mappers.mapper import Evaluated
@@ -23,76 +20,54 @@ def _is_django_model(data_source):
         return False
 
 
-def _validate_fields(fields, data_source, config):
-    for field, field_type in fields:
-        target_field = config.get(field, field)
-        if isinstance(target_field, Evaluated):
-            _validate_evaluated_field(field_type)
-        elif isinstance(target_field, _LazyMapper):
-            mapper = _validate_mapper_field(
-                field, field_type, target_field, data_source
-            )
-            config[field] = mapper
-        elif isinstance(target_field, str):
-            _validate_field(target_field, field_type, data_source)
-        elif isinstance(target_field, tuple):
-            if not len(target_field) > 1:
-                raise MapperError
-            if not all(isinstance(path_field, str) for path_field in target_field):
-                raise MapperError
-            model = data_source
-            for path_field in target_field[:-1]:
-                model_field = _get_data_source_field(path_field, model)
-                if not model_field.is_relation:
-                    raise MapperError
-                if model_field.many_to_many:
-                    raise MapperError
-                model = model_field.related_model
-            _validate_field(target_field[-1], field_type, model)
-        else:
-            raise Exception(
-                "Unknown config value {} in the '{}' field".format(target_field, field)
-            )
-
-
-def _validate_field(field, field_type, data_source):
-    _validate_evaluated_field(field_type)
-    model_field = _get_data_source_field(field, data_source)
-    if model_field.null is True and not _is_optional(field_type):
-        raise MapperError
-
-
-def _validate_evaluated_field(field_type):
-    if _is_entity(field_type):
-        raise MapperError
-
-
-def _validate_mapper_field(field, field_type, lazy_mapper, data_source):
-    model_field = _get_data_source_field(field, data_source)
-    if not model_field.is_relation:
-        raise MapperError
-    if model_field.many_to_many:
-        raise MapperError
-    mapper = lazy_mapper.build(field_type, model_field.related_model)
-    return mapper
-
-
-def _get_data_source_field(name, data_source):
+def _get_fields(data_source, exclude=None):
+    fields = {}
     for field in data_source._meta._get_fields():
-        if field.name == name:
-            return field
-        elif field.is_relation and name == getattr(field, "attname", object()):
-            return field
-    else:
-        raise MapperError(
-            "Can not find '{}' field in the {} model".format(name, data_source)
+        if field is exclude:
+            continue
+        names = _get_field_names(field)
+        disassembled = _disassemble_field(field)
+        for name in names:
+            fields[name] = disassembled
+    return fields
+
+
+def _get_field_names(field):
+    yield field.name
+    attname = getattr(field, "attname", None)
+    if attname is not None and field.name != attname:
+        yield attname
+
+
+def _disassemble_field(field):
+    disassembled = {
+        "is_nullable": bool(field.null),
+        "is_link": field.is_relation,
+        "is_collection": field.many_to_many,
+    }
+    if disassembled["is_link"] and not disassembled["is_collection"]:
+        disassembled["link"] = field.related_model
+        disassembled["link_to"] = _get_fields(
+            field.related_model, exclude=field.remote_field
         )
+    return disassembled
+
+
+def _factory(fields, entity_factory, mapping):
+    return _ValuesList(
+        fields,
+        entity_factory,
+        mapping,
+        _get_values_list_arguments(fields, mapping),
+        _get_values_list_iterable_class(entity_factory, fields, mapping),
+    )
 
 
 class _ValuesList(object):
-    def __init__(self, fields, entity_factory, arguments, iterable_class):
+    def __init__(self, fields, entity_factory, mapping, arguments, iterable_class):
         self.fields = fields
         self.entity_factory = entity_factory
+        self.mapping = mapping
         self.arguments = arguments
         self.iterable_class = iterable_class
 
@@ -102,12 +77,12 @@ class _ValuesList(object):
         return result
 
 
-def _get_values_list_arguments(fields, config):
+def _get_values_list_arguments(fields, mapping):
 
     result = []
 
     for field, _field_type in fields:
-        value = config.get(field, field)
+        value = mapping[field]
         if isinstance(value, _Mapper):
             result.extend(
                 field + "__" + argument for argument in value.iterable.arguments
@@ -127,9 +102,9 @@ def _get_values_list_arguments(fields, config):
     return tuple(result)
 
 
-def _get_values_list_iterable_class(entity_factory, fields, config):
-    if any(isinstance(value, _Mapper) for value in config.values()):
-        return _get_nested_values_list_iterable_class(entity_factory, fields, config)
+def _get_values_list_iterable_class(entity_factory, fields, mapping):
+    if any(isinstance(value, _Mapper) for value in mapping.values()):
+        return _get_nested_values_list_iterable_class(entity_factory, fields, mapping)
     else:
         return _get_flat_values_list_iterable_class(entity_factory)
 
@@ -143,8 +118,8 @@ def _get_flat_values_list_iterable_class(entity_factory):
     return _ValuesListIterable
 
 
-def _get_nested_values_list_iterable_class(entity_factory, fields, config):
-    getter, _offset = _build_entity_getter(entity_factory, fields, config, 0)
+def _get_nested_values_list_iterable_class(entity_factory, fields, mapping):
+    getter, _offset = _build_entity_getter(entity_factory, fields, mapping, 0)
 
     class _ValuesListIterable(ValuesListIterable):
         def __iter__(self):
@@ -161,16 +136,16 @@ def _build_field_getter(offset):
     return getter, offset + 1
 
 
-def _build_entity_getter(entity_factory, fields, config, offset):
+def _build_entity_getter(entity_factory, fields, mapping, offset):
     getters = []
 
     for field, _field_type in fields:
-        target_field = config.get(field, field)
+        target_field = mapping[field]
         if isinstance(target_field, _Mapper):
             getter, offset = _build_entity_getter(
                 target_field.iterable.entity_factory,
                 target_field.iterable.fields,
-                target_field.config,
+                target_field.iterable.mapping,
                 offset,
             )
         else:

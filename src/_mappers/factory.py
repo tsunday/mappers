@@ -1,8 +1,9 @@
-from _mappers.entities import _entity_fields_factory
+from _mappers.entities import _entity_factory
 from _mappers.exceptions import MapperError
 from _mappers.mapper import _LazyMapper
 from _mappers.mapper import _Mapper
 from _mappers.sources import _data_source_factory
+from _mappers.validation import _validate
 
 
 def mapper_factory(entity=None, data_source=None, config=None):
@@ -29,6 +30,8 @@ def _decompose(first, second, third):
 
 
 def _configure(entity, data_source, config):
-    fields, entity_factory = _entity_fields_factory(entity)
-    iterable = _data_source_factory(fields, entity_factory, data_source, config)
+    fields, entity_factory = _entity_factory(entity)
+    data_source_fields, data_source_factory = _data_source_factory(data_source)
+    mapping = _validate(dict(fields), data_source_fields, config, data_source)
+    iterable = data_source_factory(fields, entity_factory, mapping)
     return iterable

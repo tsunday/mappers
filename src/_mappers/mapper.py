@@ -16,11 +16,6 @@ class _LazyMapper(object):
     def __init__(self, config):
         self.config = config
 
-    def build(self, entity, data_source):
-        from _mappers.factory import mapper_factory
-
-        return mapper_factory(entity, data_source, self.config)
-
 
 class _Mapper(object):
     def __init__(self, entity, data_source, config, iterable):
