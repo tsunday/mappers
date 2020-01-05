@@ -18,6 +18,18 @@ def test_entity_type_validation(m):
 
     with pytest.raises(MapperError) as exc_info:
         Mapper(object(), m.UserModel)
+
+    message = str(exc_info.value)
+    assert message == expected
+
+
+def test_data_source_type_validation(e):
+    """Data source argument should be a Django model."""
+    expected = ""
+
+    with pytest.raises(MapperError) as exc_info:
+        Mapper(e.User, object())
+
     message = str(exc_info.value)
     assert message == expected
 

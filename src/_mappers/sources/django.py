@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+import inspect
+
 from _mappers.mapper import _Mapper
 from _mappers.mapper import Evaluated
 
@@ -14,7 +16,7 @@ except ImportError:
 
 def _is_django_model(data_source):
     if IS_AVAILABLE:
-        return issubclass(data_source, DjangoModel)
+        return inspect.isclass(data_source) and issubclass(data_source, DjangoModel)
     else:
         return False
 
