@@ -51,6 +51,28 @@ def test_config_type_validation(e, m):
     assert message == expected
 
 
+def test_config_key_type_validation(e, m):
+    """Config keys should be a string."""
+    expected = ""
+
+    with pytest.raises(MapperError) as exc_info:
+        Mapper(e.User, m.UserModel, {object(): "test"})
+
+    message = str(exc_info.value)
+    assert message == expected
+
+
+def test_config_value_type_validation(e, m):
+    """Config value should be a string."""
+    expected = ""
+
+    with pytest.raises(MapperError) as exc_info:
+        Mapper(e.User, m.UserModel, {"test": object()})
+
+    message = str(exc_info.value)
+    assert message == expected
+
+
 def test_data_source_field_missing(e, m):
     """
     Detect if data source field set is not complete.
@@ -62,6 +84,38 @@ def test_data_source_field_missing(e, m):
 
     with pytest.raises(MapperError) as exc_info:
         Mapper(e.User, m.UserModel)
+
+    message = str(exc_info.value)
+    assert message == expected
+
+
+def test_unknown_entity_fields(e, m):
+    """
+    Config keys should correspond to the entity fields only.
+
+    There is no possibility to have random keys in the config not
+    related to the entity.
+    """
+    expected = ""
+
+    with pytest.raises(MapperError) as exc_info:
+        Mapper(e.User, m.UserModel, {"age": "created"})
+
+    message = str(exc_info.value)
+    assert message == expected
+
+
+def test_unknown_data_source_fields(e, m):
+    """
+    Config values should correspond to the data source fields only.
+
+    There is no possibility to point to the random strings not related
+    to the data source.
+    """
+    expected = ""
+
+    with pytest.raises(MapperError) as exc_info:
+        Mapper(e.User, m.UserModel, {"avatar": "photo"})
 
     message = str(exc_info.value)
     assert message == expected
