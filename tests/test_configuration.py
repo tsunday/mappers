@@ -288,7 +288,8 @@ def test_ini_files_indentation():
         "tox.ini",
     ]:
         ini_text = open(ini_file).read()
-        assert not re.search(r"^   ", ini_text, re.MULTILINE)
+        assert not re.search(r"^ \S", ini_text, re.MULTILINE)
+        assert not re.search(r"^ {3}", ini_text, re.MULTILINE)
 
 
 def test_lock_files_not_committed():
