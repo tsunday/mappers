@@ -157,6 +157,13 @@ def test_nodejs_deps_are_ordered():
     assert deps == sorted(deps)
 
 
+def test_nodejs_scripts_are_ordered():
+    """Scripts of the package.json should be in order."""
+    package_json = json.load(open("package.json"))
+    scripts = list(package_json["scripts"].keys())
+    assert scripts == sorted(scripts)
+
+
 def test_poetry_deps_are_ordered():
     """Dependencies of pyproject.toml files should be in order."""
     for pyproject_toml in ["pyproject.toml", "tests/helpers/pyproject.toml"]:
