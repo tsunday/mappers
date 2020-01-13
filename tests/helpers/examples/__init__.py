@@ -28,7 +28,7 @@ def _entities():
 
         # The pydantic model returns str type for Optional[str] field
         # for some reason.  Probably a bug in the pydantic library.
-        yield pytest.param(examples.pydantic_model, marks=pytest.mark.xfail)
+        yield examples.pydantic_model
     except (SyntaxError, ImportError):
         pass
 

@@ -2,8 +2,6 @@ from __future__ import absolute_import
 
 import inspect
 
-from _mappers.compat import _is_optional
-
 
 try:
     import pydantic
@@ -25,7 +23,7 @@ def _get_fields(entity):
         (
             key,
             {
-                "is_optional": _is_optional(field.type_),
+                "is_optional": field.allow_none,
                 "is_entity": _is_pydantic(field.type_),
                 "type": field.type_,
             },
