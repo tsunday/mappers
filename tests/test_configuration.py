@@ -24,20 +24,6 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-def test_tox_environments_order():
-    """The definition of the tox environments should follow order of the envlist."""
-    tox_environments = subprocess.check_output(["tox", "-l"]).decode().splitlines()
-
-    tox_ini = open("tox.ini").read()
-
-    offsets = [
-        (tox_ini.find("testenv{}".format("" if re.match(r"py\d+", e) else ":" + e)), e)
-        for e in tox_environments
-    ]
-
-    assert offsets == sorted(offsets, key=lambda key: key[0])
-
-
 def test_tox_environments_includes_python_versions():
     """Every version from pyenv lock file should be included into Tox environments."""
     tox_environments = set(
@@ -70,6 +56,73 @@ def test_tox_environments_use_max_base_python():
     )
     for _env, basepython in helpers.tox_info("basepython"):
         assert basepython == pyenv_version
+
+
+def test_coverage_include_all_packages():
+    """
+    Coverage source should include all packages.
+
+    1. From the main pyproject.toml.
+    2. From test helpers pyproject.toml.
+    3. The tests package.
+    """
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read(".coveragerc")
+    coverage_sources = ini_parser["run"]["source"].strip().splitlines()
+
+    pyproject_toml = tomlkit.loads(open("pyproject.toml").read())
+    packages = [
+        p["include"].rstrip(".py") for p in pyproject_toml["tool"]["poetry"]["packages"]
+    ]
+
+    pyproject_toml = tomlkit.loads(open("tests/helpers/pyproject.toml").read())
+    helpers = [
+        p["include"].rstrip(".py") for p in pyproject_toml["tool"]["poetry"]["packages"]
+    ]
+
+    assert coverage_sources == packages + helpers + ["tests"]
+
+
+def test_ini_files_indentation():
+    """INI files should have indentation level equals two spaces."""
+    for ini_file in [
+        ".coveragerc",
+        ".flake8",
+        ".importlinter",
+        ".vale.ini",
+        "mypy.ini",
+        "pytest.ini",
+        "tox.ini",
+    ]:
+        ini_text = open(ini_file).read()
+        assert not re.search(r"^ \S", ini_text, re.MULTILINE)
+        assert not re.search(r"^ {3}", ini_text, re.MULTILINE)
+
+
+def test_lock_files_not_committed():
+    """Lock files should not be committed to the git repository."""
+    git_files = subprocess.check_output(["git", "ls-files"]).decode().splitlines()
+    for lock_file in ["poetry.lock", "tests/helpers/poetry.lock", "package-lock.json"]:
+        assert lock_file not in git_files
+
+
+def test_license_year():
+    """The year in the license notes should be the current year."""
+    current_year = datetime.date.today().year
+    lines = [
+        l.split(":", 1)
+        for l in subprocess.check_output(["git", "grep", "-i", "copyright"])
+        .decode()
+        .splitlines()
+    ]
+    for _filename, line in lines:
+        found = re.findall(r"\b\d{4}\b", line)
+        if found:
+            year = int(found[-1])
+            assert year == current_year
+
+
+# Azure pipeline.
 
 
 def test_tox_environments_equal_azure_tasks():
@@ -131,6 +184,23 @@ def test_tox_generative_environments_equal_azure_task_python_version():
     }
     for k, v in azure_tasks.items():
         assert k == v
+
+
+# Definition order.
+
+
+def test_tox_environments_are_ordered():
+    """The definition of the tox environments should follow order of the envlist."""
+    tox_environments = subprocess.check_output(["tox", "-l"]).decode().splitlines()
+
+    tox_ini = open("tox.ini").read()
+
+    offsets = [
+        (tox_ini.find("testenv{}".format("" if re.match(r"py\d+", e) else ":" + e)), e)
+        for e in tox_environments
+    ]
+
+    assert offsets == sorted(offsets, key=lambda key: key[0])
 
 
 def test_tox_deps_are_ordered():
@@ -212,6 +282,9 @@ def test_pre_commit_hooks_avoid_additional_dependencies():
     assert all("additional_dependencies" not in hook for hook in hooks)
 
 
+# Version pinning.
+
+
 def test_tox_deps_not_pinned():
     """Dependencies of tox environments should not have versions."""
     for _env, deps in helpers.tox_info("deps"):
@@ -256,67 +329,3 @@ def test_pre_commit_hooks_not_pinned():
     """Hook revisions of the pre-commit should not have versions."""
     pre_commit_config_yaml = yaml.safe_load(open(".pre-commit-config.yaml").read())
     assert all(repo["rev"] == "" for repo in pre_commit_config_yaml["repos"])
-
-
-def test_coverage_include_all_packages():
-    """
-    Coverage source should include all packages.
-
-    1. From the main pyproject.toml.
-    2. From test helpers pyproject.toml.
-    3. The tests package.
-    """
-    ini_parser = configparser.ConfigParser()
-    ini_parser.read(".coveragerc")
-    coverage_sources = ini_parser["run"]["source"].strip().splitlines()
-
-    pyproject_toml = tomlkit.loads(open("pyproject.toml").read())
-    packages = [
-        p["include"].rstrip(".py") for p in pyproject_toml["tool"]["poetry"]["packages"]
-    ]
-
-    pyproject_toml = tomlkit.loads(open("tests/helpers/pyproject.toml").read())
-    helpers = [
-        p["include"].rstrip(".py") for p in pyproject_toml["tool"]["poetry"]["packages"]
-    ]
-
-    assert coverage_sources == packages + helpers + ["tests"]
-
-
-def test_ini_files_indentation():
-    """INI files should have indentation level equals two spaces."""
-    for ini_file in [
-        ".coveragerc",
-        ".flake8",
-        ".importlinter",
-        ".vale.ini",
-        "mypy.ini",
-        "pytest.ini",
-        "tox.ini",
-    ]:
-        ini_text = open(ini_file).read()
-        assert not re.search(r"^ \S", ini_text, re.MULTILINE)
-        assert not re.search(r"^ {3}", ini_text, re.MULTILINE)
-
-
-def test_lock_files_not_committed():
-    """Lock files should not be committed to the git repository."""
-    git_files = subprocess.check_output(["git", "ls-files"]).decode().splitlines()
-    for lock_file in ["poetry.lock", "tests/helpers/poetry.lock", "package-lock.json"]:
-        assert lock_file not in git_files
-
-
-def test_license_year():
-    """The year in the license notes should be the current year."""
-    current_year = datetime.date.today().year
-    lines = [
-        l.split(":", 1)
-        for l in subprocess.check_output(["git", "grep", "-i", "copyright"])
-        .decode()
-        .splitlines()
-    ]
-    for _filename, line in lines:
-        found = re.findall(r"\b\d{4}\b", line)
-        if found:
-            year = int(found[-1])
-            assert year == current_year
