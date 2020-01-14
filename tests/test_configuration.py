@@ -2,7 +2,6 @@
 import collections
 import configparser
 import datetime
-import itertools
 import json
 import re
 import subprocess
@@ -24,14 +23,12 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-def test_tox_environments_includes_python_versions():
+def test_all_pyenv_versions_in_tox_environments():
     """Every version from pyenv lock file should be included into Tox environments."""
-    tox_environments = set(
-        itertools.chain.from_iterable(
-            e.split("-")
-            for e in subprocess.check_output(["tox", "-l"]).decode().splitlines()
-        )
-    )
+    tox_environments = {
+        e.split("-")[0]
+        for e in subprocess.check_output(["tox", "-l"]).decode().splitlines()
+    }
 
     pyenv_versions = [
         "py{}{}".format(*v.split(".")[0:2])
@@ -56,6 +53,27 @@ def test_tox_environments_use_max_base_python():
     )
     for _env, basepython in helpers.tox_info("basepython"):
         assert basepython == pyenv_version
+
+
+def test_envlist_contains_all_tox_environments():
+    """
+    The envlist setting should contains all tox environments.
+
+    It's not allowed to have tox environments defined without having
+    them in the envlist.
+    """
+    tox_environments = {
+        e.split("-")[0]
+        for e in subprocess.check_output(["tox", "-l"]).decode().splitlines()
+    }
+
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read("tox.ini")
+    tox_ini = {
+        k.replace("testenv:", "") for k in ini_parser if k.startswith("testenv:")
+    }
+
+    assert not tox_ini - tox_environments
 
 
 def test_coverage_include_all_packages():
