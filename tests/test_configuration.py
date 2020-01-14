@@ -76,6 +76,26 @@ def test_envlist_contains_all_tox_environments():
     assert not tox_ini - tox_environments
 
 
+def test_tox_generative_environments_has_common_definition():
+    """
+    Test envlist contains python environments together with plain testenv.
+
+    The plain testenv definition is allowed only if envlist contains
+    generative environments.
+    """
+    tox_environments = {
+        "testenv"
+        for e in subprocess.check_output(["tox", "-l"]).decode().splitlines()
+        if re.match(r"\Apy\d{2}\Z", e.split("-")[0])
+    }
+
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read("tox.ini")
+    tox_ini = {e for e in ini_parser if e == "testenv"}
+
+    assert tox_environments == tox_ini
+
+
 def test_coverage_include_all_packages():
     """
     Coverage source should include all packages.
