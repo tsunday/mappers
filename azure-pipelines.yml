@@ -137,3 +137,11 @@ jobs:
         env:
           CODECOV_TOKEN: $(codecov.token)
         displayName: Report Coverage.
+  - job: "Deploy"
+    dependsOn:
+      - "Test"
+    condition: |
+      and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    steps:
+      - script: |
+          echo Run deploy!
