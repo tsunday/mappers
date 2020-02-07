@@ -24,7 +24,7 @@ pytestmark = pytest.mark.skipif(
 
 
 def test_all_pyenv_versions_in_tox_environments():
-    """Every version from pyenv lock file should be included into Tox environments."""
+    """Every version from pyenv lock file should be included into Tox."""
     tox_environments = {
         e.split("-")[0]
         for e in subprocess.check_output(["tox", "-l"]).decode().splitlines()
@@ -40,8 +40,10 @@ def test_all_pyenv_versions_in_tox_environments():
 
 
 def test_tox_environments_use_max_base_python():
-    """
-    Every Tox environment with base Python specified should use max Python version.
+    """Verify base Python version specified for Tox environments.
+
+    Every Tox environment with base Python version specified should
+    use max Python version.
 
     Max Python version is assumed from the .python-versions file.
     """
@@ -56,8 +58,7 @@ def test_tox_environments_use_max_base_python():
 
 
 def test_envlist_contains_all_tox_environments():
-    """
-    The envlist setting should contains all tox environments.
+    """The envlist setting should contains all tox environments.
 
     It's not allowed to have tox environments defined without having
     them in the envlist.
@@ -77,8 +78,7 @@ def test_envlist_contains_all_tox_environments():
 
 
 def test_tox_generative_environments_has_common_definition():
-    """
-    Test envlist contains python environments together with plain testenv.
+    """Test envlist contains python environments together with plain testenv.
 
     The plain testenv definition is allowed only if envlist contains
     generative environments.
@@ -97,8 +97,7 @@ def test_tox_generative_environments_has_common_definition():
 
 
 def test_coverage_include_all_packages():
-    """
-    Coverage source should include all packages.
+    """Coverage source should include all packages.
 
     1. From the main pyproject.toml.
     2. From test helpers pyproject.toml.
@@ -164,8 +163,7 @@ def test_license_year():
 
 
 def test_tox_environments_equal_azure_tasks():
-    """
-    Every tox environment should present in the Azure Pipeline task list.
+    """Every tox environment should present in the Azure Pipeline task list.
 
     The order should be preserved.
     """
@@ -180,19 +178,18 @@ def test_tox_environments_equal_azure_tasks():
 
 
 def test_azure_task_names_equals_tox_environments():
-    """The name of the task should equals the name of the environment as well."""
+    """The name of the task should equals the name of the environment."""
     azure_pipelines = yaml.safe_load(open("azure-pipelines.yml").read())
     for k, v in azure_pipelines["jobs"][0]["strategy"]["matrix"].items():
         assert k == v["tox.env"]
 
 
 def test_tox_environment_base_python_equal_azure_task_python_version():
-    """
-    Python version should present in the Azure Pipeline task list.
+    """Python version should present in the Azure Pipeline task list.
 
-    Python version of the Tox environment should be equal to the
-    version of the corresponding Azure Pipeline task.  Python version
-    of the environment should be specified in the base python option.
+    Python version of the Tox environment should be equal to the version
+    of the corresponding Azure Pipeline task.  Python version of the
+    environment should be specified in the base python option.
     """
     azure_pipelines = yaml.safe_load(open("azure-pipelines.yml").read())
     azure_tasks = {
@@ -207,12 +204,11 @@ def test_tox_environment_base_python_equal_azure_task_python_version():
 
 
 def test_tox_generative_environments_equal_azure_task_python_version():
-    """
-    Python version should present in the Azure Pipeline task list.
+    """Python version should present in the Azure Pipeline task list.
 
-    Python version of the generative Tox environment should equal to
-    the version of the corresponding Azure Pipeline task.  Python
-    version of the environment should be specified in its name.
+    Python version of the generative Tox environment should equal to the
+    version of the corresponding Azure Pipeline task.  Python version of
+    the environment should be specified in its name.
     """
     azure_pipelines = yaml.safe_load(open("azure-pipelines.yml").read())
     azure_tasks = {
@@ -228,7 +224,7 @@ def test_tox_generative_environments_equal_azure_task_python_version():
 
 
 def test_tox_environments_are_ordered():
-    """The definition of the tox environments should follow order of the envlist."""
+    """Tox environments definition should follow order of the envlist."""
     tox_environments = subprocess.check_output(["tox", "-l"]).decode().splitlines()
 
     tox_ini = open("tox.ini").read()
@@ -301,8 +297,7 @@ def test_build_requires_are_ordered():
 
 
 def test_pre_commit_hooks_avoid_additional_dependencies():
-    """
-    Additional dependencies of the pre-commit should not be used.
+    """Additional dependencies of the pre-commit should not be used.
 
     This is related to all hooks of all repositories.
     """
@@ -336,7 +331,7 @@ def test_tox_deps_not_pinned():
 
 
 def test_nodejs_deps_not_pinned():
-    """Development dependencies of the package.json should not have versions."""
+    """Dependencies of the package.json should not have versions."""
     package_json = json.load(open("package.json"))
     versions = list(package_json["devDependencies"].values())
     assert all(v == "*" for v in versions)
@@ -355,7 +350,7 @@ def test_poetry_deps_not_pinned():
 
 
 def test_build_requires_not_pinned():
-    """Build system requirements of pyproject.toml files should not have versions."""
+    """Build requirements of pyproject.toml files should not have versions."""
     for pyproject_toml in ["pyproject.toml", "tests/helpers/pyproject.toml"]:
         pyproject_toml = tomlkit.loads(open(pyproject_toml).read())
         requires = pyproject_toml["build-system"]["requires"]

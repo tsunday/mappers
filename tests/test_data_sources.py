@@ -15,8 +15,7 @@ pytestmark = pytest.mark.django_db
 
 
 def test_result_raw_method(e, m, r):
-    """
-    Provide a way to access underling iterable object.
+    """Provide a way to access underling iterable object.
 
     This code should return a queryset of `User` instances.
     """
@@ -40,8 +39,7 @@ def test_result_raw_method(e, m, r):
 
 
 def test_result_list_converter(e, m, r):
-    """
-    Infer collection converter from the function result annotation.
+    """Infer collection converter from the function result annotation.
 
     This code should return a list of `User` instances.
     """
@@ -60,8 +58,7 @@ def test_result_list_converter(e, m, r):
 
 
 def test_result_object_converter(e, m, r):
-    """
-    Return a single object.
+    """Return a single object.
 
     If instead of converter annotation will be an entity class, we
     should return a single object.  Not a collection.
@@ -79,12 +76,11 @@ def test_result_object_converter(e, m, r):
 
 
 def test_result_optional_converter(e, m, r):
-    """
-    Return a single object or None.
+    """Return a single object or None.
 
     If annotation of the reader will be an optional entity class, we
-    should not raise DoesNotExist error.  Instead of this we will
-    return None.
+    should not raise DoesNotExist error.  Instead of this we will return
+    None.
     """
     mapper = Mapper(e.User, m.UserModel, {"primary_key": "id"})
 
@@ -101,8 +97,7 @@ def test_result_optional_converter(e, m, r):
 
 @pytest.mark.parametrize("value", [None, False, Logger])
 def test_result_unknown_converter(e, m, r, value):
-    """
-    Raise error in unclear situation.
+    """Raise error in unclear situation.
 
     If annotation of the reader will be something unknown, we should
     raise MapperError.
@@ -122,8 +117,7 @@ def test_result_unknown_converter(e, m, r, value):
 
 
 def test_nested_mapper(e, m, r):
-    """
-    Set mapper as a field of another mapper.
+    """Set mapper as a field of another mapper.
 
     Entities could contains nested entities.  Mappers of nested
     entities should be expressed as nested mappers in the config.
@@ -152,8 +146,7 @@ def test_nested_mapper(e, m, r):
 
 
 def test_deep_nested_mapper(e, m, r):
-    """
-    Set mapper as a field of another field.
+    """Set mapper as a field of another field.
 
     Nested entities could contain nested entities as well.  Mappers of
     nested entities should contain nested mappers as well.
@@ -194,8 +187,7 @@ def test_deep_nested_mapper(e, m, r):
 
 
 def test_related_field(e, m, r):
-    """
-    Set field of the related data source to the entity field.
+    """Set field of the related data source to the entity field.
 
     Mapper could point any field of the entity to any field of any
     related model of the mapped data source.
@@ -221,8 +213,7 @@ def test_related_field(e, m, r):
 
 
 def test_resolve_id_field_from_foreign_key_without_config(e, m, r):
-    """
-    Use foreign key as a field.
+    """Use foreign key as a field.
 
     Original data source model could have foreign key field defined.
     The actual entity may require only id value with out whole related
@@ -251,12 +242,11 @@ def test_resolve_id_field_from_foreign_key_without_config(e, m, r):
 
 
 def test_evaluated_field(e, m, r):
-    """
-    Evaluate fields which are not declared in the data source.
+    """Evaluate fields which are not declared in the data source.
 
-    Evaluated marker should be interpreted as a reason to ignore
-    absence of the field directly on the data source model.  Field
-    with exactly this name will appears on the collection.
+    Evaluated marker should be interpreted as a reason to ignore absence
+    of the field directly on the data source model.  Field with exactly
+    this name will appears on the collection.
     """
     mapper = Mapper(
         e.TotalMessage, m.MessageModel, {"primary_key": "id", "total": Evaluated()}
@@ -277,11 +267,10 @@ def test_evaluated_field(e, m, r):
 
 
 def test_named_evaluated_field(e, m, r):
-    """
-    Use custom name in the data source for the evaluation result.
+    """Use custom name in the data source for the evaluation result.
 
-    Evaluated marker could be pointed to the field with a different
-    name than the target attribute.
+    Evaluated marker could be pointed to the field with a different name
+    than the target attribute.
     """
     mapper = Mapper(
         e.TotalMessage,
