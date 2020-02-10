@@ -1,5 +1,5 @@
 module.exports = {
-  repositoryUrl: "https://github.com/dry-python/mappers/",
+  repositoryUrl: "https://github.com/dry-python/mappers",
   tagFormat: "${version}",
   plugins: [
     "@semantic-release/commit-analyzer",
