@@ -29,6 +29,7 @@ markdown_extensions:
       custom_checkbox: true
 nav:
   - "Home": index.md
+  - "Changelog": changelog.md
   # A UI hack to split Table of Content into two visual parts.
   - "": "/"
   - "": "/"
