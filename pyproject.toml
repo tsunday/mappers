@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mappers"
-version = "1.0.0"
+version = "1.0.1"
 
 description = "Declarative mappers from ORM models to domain entities. And back again!"
 readme = "README.md"
