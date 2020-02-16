@@ -5,6 +5,7 @@ ban-relative-imports = True
 exclude =
   .tox
   migrations
+  node_modules
 # We're fine to have class attributes with the name `list`.
 # Document dunder methods is also redundant.
 # Line breaks before binary operator is also fine.
