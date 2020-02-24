@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Tests related to different data sources."""
 from logging import Logger
 

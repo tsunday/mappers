@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Declarative mappers from ORM models to domain entities.
 
 :copyright: (c) 2019-2020 dry-python team.

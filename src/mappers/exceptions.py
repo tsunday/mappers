@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """A set of mappers' exceptions.
 
 :copyright: (c) 2019-2020 by dry-python team.

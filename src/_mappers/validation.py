@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from _mappers.exceptions import MapperError
 from _mappers.mapper import _LazyMapper
 from _mappers.mapper import Evaluated

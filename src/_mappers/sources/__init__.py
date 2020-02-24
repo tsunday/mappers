@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from _mappers.exceptions import MapperError
 from _mappers.sources import django
 

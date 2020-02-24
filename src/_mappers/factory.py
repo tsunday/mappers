@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from _mappers.entities import _entity_factory
 from _mappers.exceptions import MapperError
 from _mappers.mapper import _LazyMapper

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Tests related to the config validation."""
 import pytest
 

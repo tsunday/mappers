@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from _mappers.entities import attrs
 from _mappers.entities import dataclasses
 from _mappers.entities import pydantic
